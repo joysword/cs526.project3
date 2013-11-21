@@ -229,6 +229,7 @@ def onEvent():
 	global me
 
 	e = getEvent()
+	#print e.getSourceId()
 
 	if e.isKeyDown(ord('a')):
 		me.translate(-0.1,0,0,Space.Local)
@@ -250,10 +251,10 @@ def onEvent():
 		print 'w'
 		me.getRigidBody().sync()
 		e.setProcessed()
-	elif e.isKeyDown(ord('r')):
-		me.translate(0,0.1,0,Space.Local)
-		print 'r'
-		me.getRigidBody().sync()
+	elif e.isKeyDown(32):
+		#me.translate(0,0.5,0,Space.Local)
+		me.getRigidBody().applyCentralImpulse(Vector3(0,120,0))
+		print 'space_bar'
 		e.setProcessed()
 	elif e.isKeyDown(ord('f')):
 		me.translate(0,-0.1,0,Space.Local)
