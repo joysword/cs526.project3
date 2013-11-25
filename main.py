@@ -360,16 +360,16 @@ def generate_level():
 				wall.getRigidBody().sync()
 				sn_root.addChild(wall)
 
-				# reverse
-				wall = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
-				wall.setPosition(x,WALL_HALF_HEIGHT,z+TILE_HALF_WIDTH)
-				wall.yaw(pi)
-				wall.clearMaterials()
-				wall.addMaterial(texture.wall)
-				wall.getMaterial().setProgram('floor')
-				wall.getRigidBody().initialize(RigidBodyType.Plane,0)
-				wall.getRigidBody().sync()
-				sn_root.addChild(wall)
+				# # reverse
+				# wall = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
+				# wall.setPosition(x,WALL_HALF_HEIGHT,z+TILE_HALF_WIDTH)
+				# wall.yaw(pi)
+				# wall.clearMaterials()
+				# wall.addMaterial(texture.wall)
+				# wall.getMaterial().setProgram('floor')
+				# wall.getRigidBody().initialize(RigidBodyType.Plane,0)
+				# wall.getRigidBody().sync()
+				# sn_root.addChild(wall)
 
 			elif ti==23: # torch on NORTH
 
@@ -390,16 +390,16 @@ def generate_level():
 				wall.getRigidBody().sync()
 				sn_root.addChild(wall)
 
-				# reverse
-				wall = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
-				wall.setPosition(x,WALL_HALF_HEIGHT,z+TILE_HALF_WIDTH)
-				wall.yaw(pi)
-				wall.clearMaterials()
-				wall.addMaterial(texture.wall)
-				wall.getMaterial().setProgram('floor')
-				wall.getRigidBody().initialize(RigidBodyType.Plane,0)
-				wall.getRigidBody().sync()
-				sn_root.addChild(wall)
+				# # reverse
+				# wall = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
+				# wall.setPosition(x,WALL_HALF_HEIGHT,z+TILE_HALF_WIDTH)
+				# wall.yaw(pi)
+				# wall.clearMaterials()
+				# wall.addMaterial(texture.wall)
+				# wall.getMaterial().setProgram('floor')
+				# wall.getRigidBody().initialize(RigidBodyType.Plane,0)
+				# wall.getRigidBody().sync()
+				# sn_root.addChild(wall)
 
 				torch = Torch(torch_id)
 				torch_id += 1
@@ -426,16 +426,16 @@ def generate_level():
 				wall.getRigidBody().sync()
 				sn_root.addChild(wall)
 
-				# reverse
-				wall = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
-				wall.setPosition(x-TILE_HALF_WIDTH,WALL_HALF_HEIGHT,z)
-				wall.yaw(HALF_PI)
-				wall.clearMaterials()
-				wall.addMaterial(texture.wall)
-				wall.getMaterial().setProgram('floor')
-				wall.getRigidBody().initialize(RigidBodyType.Plane,0)
-				wall.getRigidBody().sync()
-				sn_root.addChild(wall)
+				# # reverse
+				# wall = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
+				# wall.setPosition(x-TILE_HALF_WIDTH,WALL_HALF_HEIGHT,z)
+				# wall.yaw(HALF_PI)
+				# wall.clearMaterials()
+				# wall.addMaterial(texture.wall)
+				# wall.getMaterial().setProgram('floor')
+				# wall.getRigidBody().initialize(RigidBodyType.Plane,0)
+				# wall.getRigidBody().sync()
+				# sn_root.addChild(wall)
 			elif ti==24: # torch on EAST
 
 				# wall = BoxShape.create(TILE_WIDTH,WALL_HEIGHT,TILE_WIDTH)
@@ -456,16 +456,16 @@ def generate_level():
 				wall.getRigidBody().sync()
 				sn_root.addChild(wall)
 
-				# reverse
-				wall = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
-				wall.setPosition(x-TILE_HALF_WIDTH,WALL_HALF_HEIGHT,z)
-				wall.yaw(HALF_PI)
-				wall.clearMaterials()
-				wall.addMaterial(texture.wall)
-				wall.getMaterial().setProgram('floor')
-				wall.getRigidBody().initialize(RigidBodyType.Plane,0)
-				wall.getRigidBody().sync()
-				sn_root.addChild(wall)
+				# # reverse
+				# wall = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
+				# wall.setPosition(x-TILE_HALF_WIDTH,WALL_HALF_HEIGHT,z)
+				# wall.yaw(HALF_PI)
+				# wall.clearMaterials()
+				# wall.addMaterial(texture.wall)
+				# wall.getMaterial().setProgram('floor')
+				# wall.getRigidBody().initialize(RigidBodyType.Plane,0)
+				# wall.getRigidBody().sync()
+				# sn_root.addChild(wall)
 
 				torch = Torch(torch_id)
 				torch_id += 1
@@ -492,15 +492,15 @@ def generate_level():
 				wall.getRigidBody().sync()
 				sn_root.addChild(wall)
 
-				# reverse
-				wall = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
-				wall.setPosition(x,WALL_HALF_HEIGHT,z-TILE_HALF_WIDTH)
-				wall.clearMaterials()
-				wall.addMaterial(texture.wall)
-				wall.getMaterial().setProgram('floor')
-				wall.getRigidBody().initialize(RigidBodyType.Plane,0)
-				wall.getRigidBody().sync()
-				sn_root.addChild(wall)
+				# # reverse
+				# wall = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
+				# wall.setPosition(x,WALL_HALF_HEIGHT,z-TILE_HALF_WIDTH)
+				# wall.clearMaterials()
+				# wall.addMaterial(texture.wall)
+				# wall.getMaterial().setProgram('floor')
+				# wall.getRigidBody().initialize(RigidBodyType.Plane,0)
+				# wall.getRigidBody().sync()
+				# sn_root.addChild(wall)
 			elif ti==25: # torch on SOUTH
 
 				# wall = BoxShape.create(TILE_WIDTH,WALL_HEIGHT,TILE_WIDTH)
@@ -521,15 +521,15 @@ def generate_level():
 				wall.getRigidBody().sync()
 				sn_root.addChild(wall)
 
-				# reverse
-				wall = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
-				wall.setPosition(x,WALL_HALF_HEIGHT,z-TILE_HALF_WIDTH)
-				wall.clearMaterials()
-				wall.addMaterial(texture.wall)
-				wall.getMaterial().setProgram('floor')
-				wall.getRigidBody().initialize(RigidBodyType.Plane,0)
-				wall.getRigidBody().sync()
-				sn_root.addChild(wall)
+				# # reverse
+				# wall = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
+				# wall.setPosition(x,WALL_HALF_HEIGHT,z-TILE_HALF_WIDTH)
+				# wall.clearMaterials()
+				# wall.addMaterial(texture.wall)
+				# wall.getMaterial().setProgram('floor')
+				# wall.getRigidBody().initialize(RigidBodyType.Plane,0)
+				# wall.getRigidBody().sync()
+				# sn_root.addChild(wall)
 
 				torch = Torch(torch_id)
 				torch_id += 1
@@ -556,16 +556,16 @@ def generate_level():
 				wall.getRigidBody().sync()
 				sn_root.addChild(wall)
 
-				# reverse
-				wall = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
-				wall.setPosition(x+TILE_HALF_WIDTH,WALL_HALF_HEIGHT,z)
-				wall.yaw(-HALF_PI)
-				wall.clearMaterials()
-				wall.addMaterial(texture.wall)
-				wall.getMaterial().setProgram('floor')
-				wall.getRigidBody().initialize(RigidBodyType.Plane,0)
-				wall.getRigidBody().sync()
-				sn_root.addChild(wall)
+				# # reverse
+				# wall = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
+				# wall.setPosition(x+TILE_HALF_WIDTH,WALL_HALF_HEIGHT,z)
+				# wall.yaw(-HALF_PI)
+				# wall.clearMaterials()
+				# wall.addMaterial(texture.wall)
+				# wall.getMaterial().setProgram('floor')
+				# wall.getRigidBody().initialize(RigidBodyType.Plane,0)
+				# wall.getRigidBody().sync()
+				# sn_root.addChild(wall)
 			elif ti==26: # torch on WEST
 				# wall = BoxShape.create(TILE_WIDTH,WALL_HEIGHT,TILE_WIDTH)
 				# wall.setPosition(x,WALL_HALF_HEIGHT,z)
@@ -585,16 +585,16 @@ def generate_level():
 				wall.getRigidBody().sync()
 				sn_root.addChild(wall)
 
-				# reverse
-				wall = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
-				wall.setPosition(x+TILE_HALF_WIDTH,WALL_HALF_HEIGHT,z)
-				wall.yaw(-HALF_PI)
-				wall.clearMaterials()
-				wall.addMaterial(texture.wall)
-				wall.getMaterial().setProgram('floor')
-				wall.getRigidBody().initialize(RigidBodyType.Plane,0)
-				wall.getRigidBody().sync()
-				sn_root.addChild(wall)
+				# # reverse
+				# wall = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
+				# wall.setPosition(x+TILE_HALF_WIDTH,WALL_HALF_HEIGHT,z)
+				# wall.yaw(-HALF_PI)
+				# wall.clearMaterials()
+				# wall.addMaterial(texture.wall)
+				# wall.getMaterial().setProgram('floor')
+				# wall.getRigidBody().initialize(RigidBodyType.Plane,0)
+				# wall.getRigidBody().sync()
+				# sn_root.addChild(wall)
 
 				torch = Torch(torch_id)
 				torch_id += 1
@@ -630,13 +630,25 @@ def generate_level():
 				top.getMaterial().setProgram('floor')
 				sn_root.addChild(top)
 
-				door = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
-				door.setPosition(x,WALL_HALF_HEIGHT,z+TILE_HALF_WIDTH)
-				door.clearMaterials()
-				door.addMaterial(texture.door)
-				door.getMaterial().setProgram('door_left')
-				#door.setEffect('colored -e #00611c')
-				sn_root.addChild(door)
+				# door = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
+				# door.setPosition(x,WALL_HALF_HEIGHT,z+TILE_HALF_WIDTH)
+				# door.clearMaterials()
+				# door.addMaterial(texture.door)
+				# door.getMaterial().setProgram('door_left')
+				# #door.setEffect('colored -e #00611c')
+				# sn_root.addChild(door)
+
+				west = PlaneShape.create(TILE_WIDTH,CHANNEL_HEIGHT)
+				west.setPosition(x,0,z)
+				west.setPosition(x-TILE_HALF_WIDTH,CHANNEL_HALF_HEIGHT,z)
+				west.yaw(HALF_PI)
+				west.clearMaterials()
+				west.addMaterial(texture.side)
+				west.getMaterial().setProgram('floor')
+				west.getRigidBody().initialize(RigidBodyType.Plane,0)
+				west.getRigidBody().sync()
+				#west.setEffect('colored -d red')
+				sn_root.addChild(west)
 			elif ti==773: # NORTH door right
 
 				# wall = PlaneShape.create(TILE_WIDTH*0.5,WALL_HEIGHT)
@@ -664,13 +676,25 @@ def generate_level():
 				top.getMaterial().setProgram('floor')
 				sn_root.addChild(top)
 
-				door = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
-				door.setPosition(x,WALL_HALF_HEIGHT,z+TILE_HALF_WIDTH)
-				door.clearMaterials()
-				door.addMaterial(texture.door)
-				door.getMaterial().setProgram('floor')
-				#door.setEffect('colored -e #00611c')
-				sn_root.addChild(door)
+				# door = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
+				# door.setPosition(x,WALL_HALF_HEIGHT,z+TILE_HALF_WIDTH)
+				# door.clearMaterials()
+				# door.addMaterial(texture.door)
+				# door.getMaterial().setProgram('floor')
+				# #door.setEffect('colored -e #00611c')
+				# sn_root.addChild(door)
+
+				east = PlaneShape.create(TILE_WIDTH,CHANNEL_HEIGHT)
+				east.setPosition(x,0,z)
+				east.setPosition(x+TILE_HALF_WIDTH,CHANNEL_HALF_HEIGHT,z)
+				east.yaw(-HALF_PI)
+				east.clearMaterials()
+				east.addMaterial(texture.side)
+				east.getMaterial().setProgram('floor')
+				east.getRigidBody().initialize(RigidBodyType.Plane,0)
+				east.getRigidBody().sync()
+				#east.setEffect('colored -e red')
+				sn_root.addChild(east)
 			elif ti==74: # EAST door left
 
 				# wall = PlaneShape.create(TILE_WIDTH*0.5,WALL_HEIGHT)
@@ -699,14 +723,25 @@ def generate_level():
 				top.getMaterial().setProgram('floor')
 				sn_root.addChild(top)
 
-				door = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
-				door.setPosition(x-TILE_HALF_WIDTH,WALL_HALF_HEIGHT,z)
-				door.yaw(-HALF_PI)
-				door.clearMaterials()
-				door.addMaterial(texture.door)
-				door.getMaterial().setProgram('door_left')
-				#door.setEffect('colored -e #00611c')
-				sn_root.addChild(door)
+				# door = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
+				# door.setPosition(x-TILE_HALF_WIDTH,WALL_HALF_HEIGHT,z)
+				# door.yaw(-HALF_PI)
+				# door.clearMaterials()
+				# door.addMaterial(texture.door)
+				# door.getMaterial().setProgram('door_left')
+				# #door.setEffect('colored -e #00611c')
+				# sn_root.addChild(door)
+
+				north = PlaneShape.create(TILE_WIDTH,CHANNEL_HEIGHT)
+				north.setPosition(x,0,z)
+				north.setPosition(x,CHANNEL_HALF_HEIGHT,z-TILE_HALF_WIDTH)
+				north.clearMaterials()
+				north.addMaterial(texture.side)
+				north.getMaterial().setProgram('floor')
+				north.getRigidBody().initialize(RigidBodyType.Plane,0)
+				north.getRigidBody().sync()
+				#north.setEffect('colored -e red')
+				sn_root.addChild(north)
 			elif ti==774: # EAST door right
 
 				# wall = PlaneShape.create(TILE_WIDTH*0.5,WALL_HEIGHT)
@@ -735,14 +770,26 @@ def generate_level():
 				top.getMaterial().setProgram('floor')
 				sn_root.addChild(top)
 
-				door = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
-				door.setPosition(x-TILE_HALF_WIDTH,WALL_HALF_HEIGHT,z)
-				door.yaw(-HALF_PI)
-				door.clearMaterials()
-				door.addMaterial(texture.door)
-				door.getMaterial().setProgram('floor')
-				#door.setEffect('colored -e #00611c')
-				sn_root.addChild(door)
+				# door = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
+				# door.setPosition(x-TILE_HALF_WIDTH,WALL_HALF_HEIGHT,z)
+				# door.yaw(-HALF_PI)
+				# door.clearMaterials()
+				# door.addMaterial(texture.door)
+				# door.getMaterial().setProgram('floor')
+				# #door.setEffect('colored -e #00611c')
+				# sn_root.addChild(door)
+
+				south = PlaneShape.create(TILE_WIDTH,CHANNEL_HEIGHT)
+				south.setPosition(x,0,z)
+				south.setPosition(x,CHANNEL_HALF_HEIGHT,z+TILE_HALF_WIDTH)
+				south.pitch(pi)
+				south.clearMaterials()
+				south.addMaterial(texture.side)
+				south.getMaterial().setProgram('floor')
+				south.getRigidBody().initialize(RigidBodyType.Plane,0)
+				south.getRigidBody().sync()
+				#south.setEffect('colored -e red')
+				sn_root.addChild(south)
 			elif ti==75: # SOUTH door left
 
 				# wall = PlaneShape.create(TILE_WIDTH*0.5,WALL_HEIGHT)
@@ -771,14 +818,26 @@ def generate_level():
 				top.getMaterial().setProgram('floor')
 				sn_root.addChild(top)
 
-				door = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
-				door.setPosition(x,WALL_HALF_HEIGHT,z-TILE_HALF_WIDTH)
-				door.yaw(pi)
-				door.clearMaterials()
-				door.addMaterial(texture.door)
-				door.getMaterial().setProgram('door_left')
-				#door.setEffect('colored -e #00611c')
-				sn_root.addChild(door)
+				# door = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
+				# door.setPosition(x,WALL_HALF_HEIGHT,z-TILE_HALF_WIDTH)
+				# door.yaw(pi)
+				# door.clearMaterials()
+				# door.addMaterial(texture.door)
+				# door.getMaterial().setProgram('door_left')
+				# #door.setEffect('colored -e #00611c')
+				# sn_root.addChild(door)
+
+				east = PlaneShape.create(TILE_WIDTH,CHANNEL_HEIGHT)
+				east.setPosition(x,0,z)
+				east.setPosition(x+TILE_HALF_WIDTH,CHANNEL_HALF_HEIGHT,z)
+				east.yaw(-HALF_PI)
+				east.clearMaterials()
+				east.addMaterial(texture.side)
+				east.getMaterial().setProgram('floor')
+				east.getRigidBody().initialize(RigidBodyType.Plane,0)
+				east.getRigidBody().sync()
+				#east.setEffect('colored -e red')
+				sn_root.addChild(east)
 			elif ti==775: # SOUTH door right
 
 				# wall = PlaneShape.create(TILE_WIDTH*0.5,WALL_HEIGHT)
@@ -807,14 +866,26 @@ def generate_level():
 				top.getMaterial().setProgram('floor')
 				sn_root.addChild(top)
 
-				door = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
-				door.setPosition(x,WALL_HALF_HEIGHT,z-TILE_HALF_WIDTH)
-				door.yaw(pi)
-				door.clearMaterials()
-				door.addMaterial(texture.door)
-				door.getMaterial().setProgram('floor')
-				#door.setEffect('colored -e #00611c')
-				sn_root.addChild(door)
+				# door = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
+				# door.setPosition(x,WALL_HALF_HEIGHT,z-TILE_HALF_WIDTH)
+				# door.yaw(pi)
+				# door.clearMaterials()
+				# door.addMaterial(texture.door)
+				# door.getMaterial().setProgram('floor')
+				# #door.setEffect('colored -e #00611c')
+				# sn_root.addChild(door)
+
+				west = PlaneShape.create(TILE_WIDTH,CHANNEL_HEIGHT)
+				west.setPosition(x,0,z)
+				west.setPosition(x-TILE_HALF_WIDTH,CHANNEL_HALF_HEIGHT,z)
+				west.yaw(HALF_PI)
+				west.clearMaterials()
+				west.addMaterial(texture.side)
+				west.getMaterial().setProgram('floor')
+				west.getRigidBody().initialize(RigidBodyType.Plane,0)
+				west.getRigidBody().sync()
+				#west.setEffect('colored -e red')
+				sn_root.addChild(west)
 			elif ti==76: # WEST door left
 
 				# wall = PlaneShape.create(TILE_WIDTH*0.5,WALL_HEIGHT)
@@ -843,14 +914,26 @@ def generate_level():
 				top.getMaterial().setProgram('floor')
 				sn_root.addChild(top)
 
-				door = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
-				door.setPosition(x+TILE_HALF_WIDTH,WALL_HALF_HEIGHT,z)
-				door.yaw(HALF_PI)
-				door.clearMaterials()
-				door.addMaterial(texture.door)
-				door.getMaterial().setProgram('door_left')
-				#door.setEffect('colored -e #00611c')
-				sn_root.addChild(door)
+				# door = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
+				# door.setPosition(x+TILE_HALF_WIDTH,WALL_HALF_HEIGHT,z)
+				# door.yaw(HALF_PI)
+				# door.clearMaterials()
+				# door.addMaterial(texture.door)
+				# door.getMaterial().setProgram('door_left')
+				# #door.setEffect('colored -e #00611c')
+				# sn_root.addChild(door)
+
+				south = PlaneShape.create(TILE_WIDTH,CHANNEL_HEIGHT)
+				south.setPosition(x,0,z)
+				south.setPosition(x,CHANNEL_HALF_HEIGHT,z+TILE_HALF_WIDTH)
+				south.pitch(pi)
+				south.clearMaterials()
+				south.addMaterial(texture.side)
+				south.getMaterial().setProgram('floor')
+				south.getRigidBody().initialize(RigidBodyType.Plane,0)
+				south.getRigidBody().sync()
+				#south.setEffect('colored -e red')
+				sn_root.addChild(south)
 			elif ti==776: # WEST door right
 
 				# wall = PlaneShape.create(TILE_WIDTH*0.5,WALL_HEIGHT)
@@ -879,14 +962,25 @@ def generate_level():
 				top.getMaterial().setProgram('floor')
 				sn_root.addChild(top)
 
-				door = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
-				door.setPosition(x+TILE_HALF_WIDTH,WALL_HALF_HEIGHT,z)
-				door.yaw(HALF_PI)
-				door.clearMaterials()
-				door.addMaterial(texture.door)
-				door.getMaterial().setProgram('floor')
-				#door.setEffect('colored -e #00611c')
-				sn_root.addChild(door)
+				# door = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
+				# door.setPosition(x+TILE_HALF_WIDTH,WALL_HALF_HEIGHT,z)
+				# door.yaw(HALF_PI)
+				# door.clearMaterials()
+				# door.addMaterial(texture.door)
+				# door.getMaterial().setProgram('floor')
+				# #door.setEffect('colored -e #00611c')
+				# sn_root.addChild(door)
+
+				north = PlaneShape.create(TILE_WIDTH,CHANNEL_HEIGHT)
+				north.setPosition(x,0,z)
+				north.setPosition(x,CHANNEL_HALF_HEIGHT,z-TILE_HALF_WIDTH)
+				north.clearMaterials()
+				north.addMaterial(texture.side)
+				north.getMaterial().setProgram('floor')
+				#north.setEffect('colored -e red')
+				north.getRigidBody().initialize(RigidBodyType.Plane,0)
+				north.getRigidBody().sync()
+				sn_root.addChild(north)
 
 			elif ti==8: # upstairs
 				sn_upstair.setPosition(x,0,z)
@@ -905,33 +999,6 @@ def generate_level():
 				floor.getMaterial().setProgram('floor')
 				sn_root.addChild(floor)
 				sn_chest.setPosition(x,0,z)
-
-	###### PATH #######
-			elif ti==11: # path
-				# original path
-				floor = PlaneShape.create(TILE_WIDTH,TILE_WIDTH)
-				floor.setPosition(x,0,z)
-				floor.pitch(-HALF_PI)
-				floor.setEffect('colored -e #01b2f1')
-				sn_root.addChild(floor)
-
-				# floor = PlaneShape.create(TILE_WIDTH,TILE_WIDTH)
-				# floor.setPosition(x,0,z)
-				# floor.pitch(-HALF_PI)
-				# floor.clearMaterials()
-				# floor.addMaterial(texture.floor)
-				# floor.getMaterial().setProgram('floor')
-				# #floor.getRigidBody().initialize(RigidBodyType.Plane,0)
-				# #floor.getRigidBody().sync()
-				# sn_root.addChild(floor)
-
-				# ceil = PlaneShape.create(TILE_WIDTH,TILE_WIDTH)
-				# ceil.setPosition(x,WALL_HEIGHT,z)
-				# ceil.pitch(HALF_PI)
-				# ceil.clearMaterials()
-				# ceil.addMaterial(texture.ceil)
-				# ceil.getMaterial().setProgram('floor')
-				# sn_root.addChild(ceil)
 
 	###### CHANNEL #######
 			elif ti==13: # channel to north
@@ -1111,6 +1178,33 @@ def generate_level():
 					south.getRigidBody().sync()
 					#south.setEffect('colored -e red')
 					sn_root.addChild(south)
+
+	###### PATH #######
+			elif ti==11: # path
+				# original path
+				floor = PlaneShape.create(TILE_WIDTH,TILE_WIDTH)
+				floor.setPosition(x,0,z)
+				floor.pitch(-HALF_PI)
+				floor.setEffect('colored -e #01b2f1')
+				sn_root.addChild(floor)
+
+				# floor = PlaneShape.create(TILE_WIDTH,TILE_WIDTH)
+				# floor.setPosition(x,0,z)
+				# floor.pitch(-HALF_PI)
+				# floor.clearMaterials()
+				# floor.addMaterial(texture.floor)
+				# floor.getMaterial().setProgram('floor')
+				# #floor.getRigidBody().initialize(RigidBodyType.Plane,0)
+				# #floor.getRigidBody().sync()
+				# sn_root.addChild(floor)
+
+				# ceil = PlaneShape.create(TILE_WIDTH,TILE_WIDTH)
+				# ceil.setPosition(x,WALL_HEIGHT,z)
+				# ceil.pitch(HALF_PI)
+				# ceil.clearMaterials()
+				# ceil.addMaterial(texture.ceil)
+				# ceil.getMaterial().setProgram('floor')
+				# sn_root.addChild(ceil)
 
 	ground = PlaneShape.create(120,100)
 	ground.setPosition(50,0,40)
@@ -1315,7 +1409,7 @@ def onUpdate(frame, t, dt):
 			fire.setEnabled(False)
 			#print 'false'
 
-	print 'num:',num
+	#print 'num:',num
 
 	if dis_square(pos.x,pos.z,end_x, end_z)<2:
 		print 'contratulations!'

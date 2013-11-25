@@ -415,26 +415,26 @@ class Dungeon:
 		# 	self.grid[branching_pos[1]][branching_pos[0]] = 7
 
 		if direction == "NORTH":
-			self.grid[branching_pos[1]][branching_pos[0]] = 13#73
-			self.grid[branching_pos[1]][branching_pos[0]+1] = 13#773
+			self.grid[branching_pos[1]][branching_pos[0]] = 73
+			self.grid[branching_pos[1]][branching_pos[0]+1] = 773
 			for i in xrange(1,branching_length+2):
 				self.grid[branching_pos[1]-i][branching_pos[0]] = 13
 				self.grid[branching_pos[1]-i][branching_pos[0]+1] = 13
 		elif direction == "EAST":
-			self.grid[branching_pos[1]][branching_pos[0]] = 14#74
-			self.grid[branching_pos[1]+1][branching_pos[0]] = 14#774
+			self.grid[branching_pos[1]][branching_pos[0]] = 74
+			self.grid[branching_pos[1]+1][branching_pos[0]] = 774
 			for i in xrange(1,branching_length+2):
 				self.grid[branching_pos[1]][branching_pos[0]+i] = 14
 				self.grid[branching_pos[1]+1][branching_pos[0]+i] = 14
 		elif direction == "SOUTH":
-			self.grid[branching_pos[1]][branching_pos[0]] = 15#75
- 			self.grid[branching_pos[1]][branching_pos[0]-1] = 15#775
+			self.grid[branching_pos[1]][branching_pos[0]] = 75
+ 			self.grid[branching_pos[1]][branching_pos[0]-1] = 775
 			for i in xrange(1,branching_length+2):
 				self.grid[branching_pos[1]+i][branching_pos[0]] = 15
 				self.grid[branching_pos[1]+i][branching_pos[0]-1] = 15
 		elif direction == "WEST":
-			self.grid[branching_pos[1]][branching_pos[0]] = 16#76
-			self.grid[branching_pos[1]-1][branching_pos[0]] = 16#776
+			self.grid[branching_pos[1]][branching_pos[0]] = 76
+			self.grid[branching_pos[1]-1][branching_pos[0]] = 776
 			for i in xrange(1,branching_length+2):
 				self.grid[branching_pos[1]][branching_pos[0]-i] = 16
 				self.grid[branching_pos[1]-1][branching_pos[0]-i] = 16
