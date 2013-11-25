@@ -12,18 +12,19 @@
 ## module to print the map in plain text ##
 ###########################################
 
-
-
-
+###########################################
+####### edited by Shi Yin #################
+###########################################
+## Added some elements to make the maze  ##
+## more complicated                      ##
+###########################################
 
 import random
 import time
 from astar import *
 from distance_map import *
 
-
-
-
+#random.seed(19890101)
 
 class Room:
 
@@ -43,15 +44,30 @@ class Room:
 			0 = blank space (non-useable)
 			1 = floor tile (walkable)
 			2 = corner tile (non-useable)
-			3 = wall tile facing NORTH.
-			4 = wall tile facing EAST.
-			5 = wall tile facing SOUTH.
-			6 = wall tile facing WEST.
-			7 = door tile.
-			8 = stairs leading to a higher lever in the dungeon.
+			3 = wall tile on NORTH.
+			4 = wall tile on EAST.
+			5 = wall tile on SOUTH.
+			6 = wall tile on WEST.
+			73 = door tile left NORTH
+			773 = door tile right NORTh
+			74 = door tile left EAST
+			774 = door tile right EAST
+			75 = door tile left SOUTH
+			775 = door tile right SOUTH
+			76 = door tile left WEST
+			776 = door tile right WEST
+			8 = stairs leading to a higher level in the dungeon.
 			9 = stairs leading to a lower level in the dungeon.
 			10 = chest
 			11 = path from up to down staircases (floor tile)
+			13 = channel to NORTH
+			14 = channel to EAST
+			15 = channel to SOUTH
+			16 = channel to WEST
+			23 = torch on NORTH
+			24 = torch on EAST
+			25 = torch on SOUTH
+			26 = torch on WEST
 	"""
 
 
@@ -63,8 +79,6 @@ class Room:
 
 
 
-
-
 class Dungeon:
 
 
@@ -72,11 +86,12 @@ class Dungeon:
 	The Dungeon class.
 
 
-	Dungeon((grid_size_x, grid_size_y),
+	Dungeon( (grid_size_x, grid_size_y),
 			 name,
 			 max_num_rooms,
 			 min_room_size,
-			 max_room_size)
+			 max_room_size,
+			 (tile_w, tile_h) )
 
 	(grid_size_x, grid_size_y)
 		- the total size/area of the map in tiles.
@@ -109,15 +124,30 @@ class Dungeon:
 			0 = blank space (non-useable)
 			1 = floor tile (walkable)
 			2 = corner tile (non-useable)
-			3 = wall tile facing NORTH.
-			4 = wall tile facing EAST.
-			5 = wall tile facing SOUTH.
-			6 = wall tile facing WEST.
-			7 = door tile.
-			8 = stairs leading to a higher lever in the dungeon.
+			3 = wall tile on NORTH.
+			4 = wall tile on EAST.
+			5 = wall tile on SOUTH.
+			6 = wall tile on WEST.
+			73 = door tile left NORTH
+			773 = door tile right NORTh
+			74 = door tile left EAST
+			774 = door tile right EAST
+			75 = door tile left SOUTH
+			775 = door tile right SOUTH
+			76 = door tile left WEST
+			776 = door tile right WEST
+			8 = stairs leading to a higher level in the dungeon.
 			9 = stairs leading to a lower level in the dungeon.
 			10 = chest
 			11 = path from up to down staircases (floor tile)
+			13 = channel to NORTH
+			14 = channel to EAST
+			15 = channel to SOUTH
+			16 = channel to WEST
+			23 = torch on NORTH
+			24 = torch on EAST
+			25 = torch on SOUTH
+			26 = torch on WEST
 
 		-self.rooms stores the Room object from the Room class, which stores
 		 what tiles are room holds, the size of the room, and the coordinate
@@ -146,7 +176,6 @@ class Dungeon:
 
 			(max_size_x, max_size_y)
 				- the maximum size of each room to be generated.
-
 
 		get_branching_position()
 			- picks a random room that has been placed, then picks a random
@@ -191,13 +220,16 @@ class Dungeon:
 				  room to.
 
 
-		connect_rooms(branching_pos, direction)
+		connect_rooms(branching_pos, branching_length, direction)
 			- slightly changes the grid list to connect 2 rooms. Changes the
 			  wall tile, and the tile next to it in the direction it's
 			  facing, both to floor tiles (1's in the grid list).
 
 			branching_pos
 				- the location of the tile we just added a room to.
+
+			branching_length
+				- the length of branchin
 
 			direction
 				- the direction the wall was facing before we added the room.
@@ -277,8 +309,19 @@ class Dungeon:
 					row.append(1)
 			tiles.append(row)
 
-		return Room((size_x, size_y), tiles)
 
+		# torches
+		torch_x_north = random.randint(1,size_x-2)
+		torch_x_south = random.randint(1,size_x-2)
+		torch_y_east = random.randint(1,size_y-2)
+		torch_y_west = random.randint(1,size_y-2)
+
+		tiles[0][torch_x_north] = 23
+		tiles[torch_y_east][size_x-1] = 24
+		tiles[size_y-1][torch_x_south] = 25
+		tiles[torch_y_west][0] = 26
+
+		return Room((size_x, size_y), tiles)
 
 	def get_branching_position(self):
 
@@ -291,12 +334,30 @@ class Dungeon:
 			y = random.randint(branching_room.position[1],
 							   branching_room.position[1] + branching_room.size[1]-1)
 
-			if self.grid[y][x] > 2:
-				branching_tile_position = (x, y)
-				break
+			if self.grid[y][x] == 3:
+				if self.grid[y][x+1] == 3:
+					branching_tile_position = (x, y)
+					break
+			elif self.grid[y][x] == 4:
+				if self.grid[y+1][x] == 4:
+					branching_tile_position = (x, y)
+					break
+			elif self.grid[y][x] == 5:
+				if self.grid[y][x-1] == 5:
+					branching_tile_position = (x, y)
+					break
+			elif self.grid[y][x] == 6:
+				if self.grid[y-1][x] == 6:
+					branching_tile_position = (x, y)
+					break
 
 		return branching_tile_position
 
+	def get_branching_length(self):
+
+		branching_length = random.randint(0,8)
+
+		return branching_length
 
 	def get_branching_direction(self, branching_position):
 
@@ -346,22 +407,38 @@ class Dungeon:
 			room_tile_x = 0
 
 
-	def connect_rooms(self, branching_pos, direction):
+	def connect_rooms(self, branching_pos, branching_length, direction):
 
-		chance = random.randint(1, 25)
-		if chance == 25:
-			self.grid[branching_pos[1]][branching_pos[0]] = 1
-		else:
-			self.grid[branching_pos[1]][branching_pos[0]] = 1
+		# chance = random.randint(1, self.max_num_rooms)
+		# if chance == 1:
+		# 	self.grid[branching_pos[1]][branching_pos[0]] = 7
+		# else:
+		# 	self.grid[branching_pos[1]][branching_pos[0]] = 7
 
 		if direction == "NORTH":
-			self.grid[branching_pos[1]-1][branching_pos[0]] = 1
+			self.grid[branching_pos[1]][branching_pos[0]] = 73
+			self.grid[branching_pos[1]][branching_pos[0]+1] = 773
+			for i in xrange(1,branching_length+2):
+				self.grid[branching_pos[1]-i][branching_pos[0]] = 13
+				self.grid[branching_pos[1]-i][branching_pos[0]+1] = 13
 		elif direction == "EAST":
-			self.grid[branching_pos[1]][branching_pos[0]+1] = 1
+			self.grid[branching_pos[1]][branching_pos[0]] = 74
+			self.grid[branching_pos[1]+1][branching_pos[0]] = 774
+			for i in xrange(1,branching_length+2):
+				self.grid[branching_pos[1]][branching_pos[0]+i] = 14
+				self.grid[branching_pos[1]+1][branching_pos[0]+i] = 14
 		elif direction == "SOUTH":
-			self.grid[branching_pos[1]+1][branching_pos[0]] = 1
+			self.grid[branching_pos[1]][branching_pos[0]] = 75
+ 			self.grid[branching_pos[1]][branching_pos[0]-1] = 775
+			for i in xrange(1,branching_length+2):
+				self.grid[branching_pos[1]+i][branching_pos[0]] = 15
+				self.grid[branching_pos[1]+i][branching_pos[0]+1] = 15
 		elif direction == "WEST":
-			self.grid[branching_pos[1]][branching_pos[0]-1] = 1
+			self.grid[branching_pos[1]][branching_pos[0]] = 76
+			self.grid[branching_pos[1]-1][branching_pos[0]] = 776
+			for i in xrange(1,branching_length+2):
+				self.grid[branching_pos[1]][branching_pos[0]-i] = 16
+				self.grid[branching_pos[1]+1][branching_pos[0]-i] = 16
 
 
 	def set_staircases(self):
@@ -399,7 +476,7 @@ class Dungeon:
 				if start != None and end != None:
 					break
 
-		path = astar.find_path(self.grid, start, end, [0, 2, 3, 4, 5, 6, 7])
+		path = astar.find_path(self.grid, start, end, [0, 2, 3, 4, 5, 6, 23, 24, 25, 26])
 
 		if path != None:
 			for i in range(0, len(path)-1):
@@ -433,6 +510,7 @@ class Dungeon:
 
 			branching_pos = self.get_branching_position()
 			direction = self.get_branching_direction(branching_pos)
+			length = self.get_branching_length()
 			if direction:
 
 				new_room_pos = (0, 0)
@@ -441,28 +519,28 @@ class Dungeon:
 
 				if direction == "NORTH":
 					new_room_pos = (branching_pos[0] - (new_room.size[0]/2),
-									branching_pos[1] - new_room.size[1])
+									branching_pos[1] - new_room.size[1] - length)
 				elif direction == "EAST":
-					new_room_pos = (branching_pos[0] + 1,
+					new_room_pos = (branching_pos[0] + 1 + length,
 									branching_pos[1] - (new_room.size[1]/2))
 				elif direction == "SOUTH":
 					new_room_pos = (branching_pos[0] - (new_room.size[0]/2),
-									branching_pos[1] + 1)
+									branching_pos[1] + 1 + length)
 				elif direction == "WEST":
-					new_room_pos = (branching_pos[0] - (new_room.size[0]),
+					new_room_pos = (branching_pos[0] - (new_room.size[0]) - length,
 									branching_pos[1] - (new_room.size[1]/2))
 
 				if self.space_for_new_room(new_room.size, new_room_pos):
 					self.place_room(new_room, new_room_pos)
 					self.rooms.append(new_room)
-					self.connect_rooms(branching_pos, direction)
+					self.connect_rooms(branching_pos, length, direction)
 				else:
 					i += 1
 
 
 	def set_chests(self):
 
-		map = distance_map(self.grid, [11], [0, 2, 3, 4, 5, 6, 7, 8, 9])
+		map = distance_map(self.grid, [11], [0, 2, 3, 4, 5, 6, 8, 9, 23, 24, 25, 26])
 		distances = []
 
 		for y in range(0, len(map)):

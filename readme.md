@@ -1,73 +1,80 @@
 # Welcome!
 
-Welcome to the homepage of my third project of Fall 2013 Semester, I Can See Clearly Now, project 2 of Professor [Andy Johnson](http://www.evl.uic.edu/aej/)'s [Computer Graphics II](http://www.evl.uic.edu/aej/526/) course.
+Welcome to the homepage of my third project of Fall 2013 Semester, *I Can See Clearly Now*, Project 3 of Professor [Andy Johnson](http://www.evl.uic.edu/aej/)'s [Computer Graphics II](http://www.evl.uic.edu/aej/526/) course.
 See also my [Project 1](http://joysword.github.io/cs526.project1/) and [Project 2](http://joysword.github.io/cs526.project2/)
-
-### Introduction
-
-This project is a [rogue-like](http://en.wikipedia.org/wiki/Roguelike) 'game' developed as a practice on multiple techniques for [omegalib](http://github.com/uic-evl/omegalib) and [CAVE2](http://www.evl.uic.edu/core.php?mod=4&type=1&indi=424).
-
-Generally speaking, it has following features:
-
-1. Random dungeon levels generated fast using GPU
-2. Three redirection techniques implemented
-3. Music and lighting varies as environment changes
-4. [Bullet](http://bulletphysics.org/wordpress/) physics engines used for collision detection
-5. omegalib 2D container used for HUD
 
 ### Demo
 
+### Introduction
+
+This project was proposed as a [rogue-like](http://en.wikipedia.org/wiki/Roguelike) 'game' developed as a practice on multiple techniques for [omegalib](http://github.com/uic-evl/omegalib) and [CAVE2](http://www.evl.uic.edu/core.php?mod=4&type=1&indi=424). The original proposal can be found [here](https://sites.google.com/site/syin8uic/CS526/project3).
+
+What I actually implemented include:
+
+1. Random dungeon levels generated fast using GPU
+2. Navigation using Wand
+3. Background music and environmental sound effects
+4. Environmental lighting and two kinds of artificial lighting
+5. Extended [Bullet](http://bulletphysics.org/wordpress/) physics engine functionality in Omegalib applied in this project
+
 ### Download and Installation
 
-1. have omegalib installed, with python support enabled and cyclops and omegaOsg modules added
-2. if you are using Mac OS X Mountain Lion or higher, you also need to have [XQuartz](http://xquartz.macosforge.org/landing/) installed and running
-3. download source code of this project from [Github](https://github.com/joysword/cs526.project3) or on top of this page
-4. to run the project, do as following:
+1. Have omegalib installed, with python support enabled and cyclops and omegaOsg modules added
+2. If you are using Mountain Lion or higher, you also need to have [XQuartz](http://xquartz.macosforge.org/landing/) installed and running. If you are using Mavericks, you need to download Xcode 5 and command line tools.
+3. Download source code of this project from [Github](https://github.com/joysword/cs526.project3) or on top of this page
+4. To run the project, using following commands:
 $ cd [omegalib_build]/bin/
 $ ./orun -s [where_you_put_this_project]/main.py
 
-Note that to have the best performance from this app, you need to run it on CAVE2. You can buy one [here](http://www.mechdyne.com/cave2.aspx)
+Note that to have the best performance from this app, you need to run it on CAVE2. If you want one, you can buy one [here](http://www.mechdyne.com/cave2.aspx)
 
-# Features and Usage
-##### all fatures and usages are for running this app on [CAVE2](http://www.evl.uic.edu/core.php?mod=4&type=1&indi=424) if not noticed otherwise
+# Detail Description
+##### all fatures and usages discussed here are for running this app on [CAVE2](http://www.evl.uic.edu/core.php?mod=4&type=1&indi=424) if not noticed otherwise
 
-Data used in this project is coming from different sources, including but not limiting to
+### Features and Usage
+Totally randomly generated dungeon levels. Each level has random number of rooms of random size. Rooms are connected by tunnels at random positions and with random length. In each room there are 3-4 torches that provide lighting at random position of each side.
 
-* [Exoplanet Data Explorer](http://exoplanets.org/table?datasets=explorer)
-* [NASA Exoplanet Archive](http://exoplanetarchive.ipac.caltech.edu)
-* [Open Exoplanet Catalogue](http://www.openexoplanetcatalogue.com/index.php)
-* [Extrasolar Planets Encyclopedia](http://exoplanet.eu)
-* [Wikipedia](http://en.wikipedia.org)
+Floors and walls are with attached physics attributes so that the 'character' won't go across the wall.
 
-[More info](data.html) about the Data
+Currently what the 'character' can do is walking in the maze. I also implmented 'jumping' using physics but it is not really useful until creeps or monsters are put into this dungeon in the future. The 'character' starts from the room with staircases that coming from upper world and tries to find the other staircase that leads to a lower level of dungeon.
 
-### Interesting Findings
-Using this app, we are able to look into the data and discover things. See [more info](findings.html) about what I found
+There is also a chest in a random room but currently nothing is in it!
 
+To move the 'character' around, use analog stick of the Wand. To turn left or right, hold Button7 and move the Wand to the same direction that you want to turn to. To jump, press ButtonDown.
 
+### Gains
 
-Mazes will be generated using random dungeon generating algorithm
-Geometries and textures will be rendered using GPU shaders
-Textures will include at least floors, rocks and walls
-Models will include at least doors, chests and stairs
-Coming up with good ways to navigate (in cave2) through the maze
+#### GPU Programming
+I took this project as an opportunity to pick up half of what I learned in GPU Programming course, writing shaders. And learned basic of writing shaders in omegalib.
+Writing shaders in omegalib is somewhat different from doing in native OpenGL programs, but the underlying principle and process are the same. Generally speaking, the uniqueness reflects in following aspects:
 
-At least 3 redirection techniques [1] will be implemented or compared
-Making appropriate use of audio
+* omegalib provides multiple default structures and uniforms that users can assign value to in cyclops appllication
+* omegalib provides multiple default shaders. Users in most times will only need to write a part of the whole process
 
-Different background music will be played for different environment
-Sound effects will include at least footsteps, door opening and door locked
-Making appropriate use of lighting
+In this project, I wrote shaders for attaching texture to an entity in different ways.
 
-Lighting will include at least environment lighting and flashlight
-Applying appropriate physics in the scene
+#### Random Dungeon Generation
 
-Bullet physics engine will be used for collision detection
-Ideally the door movement (opening and closing) would be using Hinge Constraint in Bullet
-Ideally there will be as much as physics
-Adding simple gaming elements into the scene
+#### Lighting
+I also tried out simulating fire light and flashlight.
 
-HUD, if implemented, will be using 2D container in omegalib
-picking up keys in chests to open doors
-Ideally there will be killing monsters involved
-See [detailed desciption](features.html) for all the features.
+#### Bullet Physics
+I continued working on Bullet Physics engine and added `RigidBody` for `PlaneShape`. `PlaneShape`'s are extensively used in building the dungeon.
+I also added `addCentralForce()` and `setLinearVelocity()` to current functionality set in cyclops because I thought they would be useful if the 'character' needs to kill creatures in the dungeon. Unfortunately, I haven't got a chance to add more fun stuff into my dungeon.
+
+#### *Using xbox 360 controller as input device
+This has not been acquired 100%. I tried to implement handling events from xbox 360 controller because xbox 360 controller is probably more intuitive than the Wand in this setting. Although some experiments were done, I couldn't make everything work properly before deadline.
+
+### Source and Reference
+Sources and reference I used in this project:
+
+* [CS 525 Course Notes](http://www.evl.uic.edu/aej/525/index.html) (I used it to pick up GPU programming)
+* [Encycolorpedia](http://encycolorpedia.com/f8c377) (I used it to choose color for lighting)
+* [Introduction to OGRE3D](https://jira.ai2.upv.es/confluence/download/attachments/13303823/Introduction+to+Ogre3D.pdf?version=1&modificationDate=1317394839000) (I used it to choose parameters for lighting)
+* [lighthouse3d.com](http://www.lighthouse3d.com/tutorials/) (I used it to pick up GPU programming)
+* [NetCave: Project Description](http://graphics.cs.wisc.edu/WP/virtualreality11/category/netcave-project-description/) (I used it as the idea of this project)
+* [Random Dungeon Generations](http://breinygames.blogspot.com/2011/07/random-map-generation.html) (I used it as the foundation of generator)
+
+# Future Work
+
+There are plenty of interesting things I thought of adding to the dungeon. I hope in the future I can make this dungeon more and more fun (by making it creepy and dangerous)
