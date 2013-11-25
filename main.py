@@ -277,9 +277,9 @@ def playSound(sd, pos, vol):
 	sd.setPosition(pos)
 	sd.setVolume(vol)
 	sd.setWidth(20)
-	#sd.play()
+	sd.play()
 
-playSound(sd_bgm,cam.getPosition(),0.05)
+playSound(sd_bgm,cam.getPosition(),0.1)
 
 ##############################################################################################################
 # DRAW MAZE
@@ -294,7 +294,7 @@ def generate_level():
 	global level
 	global tile
 
-	playSound(sd_stair,cam.getPosition(),0.05)
+	playSound(sd_stair,cam.getPosition(),0.1)
 
 	removeAllChildren(sn_root)
 
@@ -1132,6 +1132,8 @@ def onEvent():
 	global isButton7down
 	global wandOldPos
 	global isWalking
+	global end_x
+	global end_z
 
 	e = getEvent()
 
@@ -1143,16 +1145,16 @@ def onEvent():
 			#print 'RIGHT LEFT'
 			if isWalking == False:
 				isWalking = True
-				playSound(sd_footstep,cam.getPosition(), 0.05)
-			me.translate(axis_lr*0.04,0,0,Space.Local)
+				playSound(sd_footstep,cam.getPosition(), 0.1)
+			me.translate(axis_lr*0.07,0,0,Space.Local)
 			me.getRigidBody().sync()
 			e.setProcessed()
 		if axis_ud>0.5 or axis_ud<-0.5:
 			#print 'UP DOWN'
 			if isWalking == False:
 				isWalking = True
-				playSound(sd_footstep,cam.getPosition(), 0.05)
-			me.translate(0,0,axis_ud*0.04,Space.Local)
+				playSound(sd_footstep,cam.getPosition(), 0.1)
+			me.translate(0,0,axis_ud*0.07,Space.Local)
 			me.getRigidBody().sync()
 			e.setProcessed()
 		if axis_lr<0.5 and axis_lr>-0.5 and axir_ud<0.5 and axis_ud>0.5:
@@ -1175,7 +1177,7 @@ def onEvent():
 
 	 	elif isButton7down:
 			trans = wandOldPos-e.getPosition()
-			me.yaw(trans.x*HALF_PI*0.02)
+			me.yaw(trans.x*HALF_PI*0.05)
 			me.getRigidBody().sync()
 			#print 'here!!!'
 			e.setProcessed()
@@ -1187,6 +1189,11 @@ def onEvent():
 
 		elif e.isButtonDown(EventFlags.ButtonUp):
 			me.resetOrientation()
+
+		elif e.isButtonDown(EventFlags.ButtonLeft):
+			me.setPosition(end_x,end_z-2)
+			me.resetOrientation()
+			me.getRigidBody().sync()
 
 	# if e.getSourceId()==1:
 
@@ -1320,13 +1327,13 @@ def onUpdate(frame, t, dt):
 	if t-bgmDeltaT>=50:
 		print "replaying bgm"
 		bgmDeltaT = t
-		playSound(sd_bgm,cam.getPosition(),0.05)
+		playSound(sd_bgm,cam.getPosition(),0.1)
 
 	# play water dripping sound when entering channels
 	if inChannel==False:
 		if tile[int(pos.z)][int(pos.x)]==16 or tile[int(pos.z)][int(pos.x)]==13 or tile[int(pos.z)][int(pos.x)]==14 or tile[int(pos.z)][int(pos.x)]==15:
 			inChannel = True
-			playSound(sd_water,cam.getPosition(),0.05)
+			playSound(sd_water,cam.getPosition(),0.1)
 	else:
 		if tile[int(pos.z)][int(pos.x)]!=16 and tile[int(pos.z)][int(pos.x)]!=13 and tile[int(pos.z)][int(pos.x)]!=14 and tile[int(pos.z)][int(pos.x)]!=15:
 			inChannel = False
