@@ -24,7 +24,7 @@ import time
 from astar import *
 from distance_map import *
 
-#random.seed(19890101)
+random.seed(19890101)
 
 class Room:
 
@@ -309,7 +309,6 @@ class Dungeon:
 					row.append(1)
 			tiles.append(row)
 
-
 		# torches
 		torch_x_north = random.randint(1,size_x-2)
 		torch_x_south = random.randint(1,size_x-2)
@@ -355,7 +354,7 @@ class Dungeon:
 
 	def get_branching_length(self):
 
-		branching_length = random.randint(0,8)
+		branching_length = random.randint(4,8)
 
 		return branching_length
 
@@ -416,29 +415,29 @@ class Dungeon:
 		# 	self.grid[branching_pos[1]][branching_pos[0]] = 7
 
 		if direction == "NORTH":
-			self.grid[branching_pos[1]][branching_pos[0]] = 73
-			self.grid[branching_pos[1]][branching_pos[0]+1] = 773
+			self.grid[branching_pos[1]][branching_pos[0]] = 13#73
+			self.grid[branching_pos[1]][branching_pos[0]+1] = 13#773
 			for i in xrange(1,branching_length+2):
 				self.grid[branching_pos[1]-i][branching_pos[0]] = 13
 				self.grid[branching_pos[1]-i][branching_pos[0]+1] = 13
 		elif direction == "EAST":
-			self.grid[branching_pos[1]][branching_pos[0]] = 74
-			self.grid[branching_pos[1]+1][branching_pos[0]] = 774
+			self.grid[branching_pos[1]][branching_pos[0]] = 14#74
+			self.grid[branching_pos[1]+1][branching_pos[0]] = 14#774
 			for i in xrange(1,branching_length+2):
 				self.grid[branching_pos[1]][branching_pos[0]+i] = 14
 				self.grid[branching_pos[1]+1][branching_pos[0]+i] = 14
 		elif direction == "SOUTH":
-			self.grid[branching_pos[1]][branching_pos[0]] = 75
- 			self.grid[branching_pos[1]][branching_pos[0]-1] = 775
+			self.grid[branching_pos[1]][branching_pos[0]] = 15#75
+ 			self.grid[branching_pos[1]][branching_pos[0]-1] = 15#775
 			for i in xrange(1,branching_length+2):
 				self.grid[branching_pos[1]+i][branching_pos[0]] = 15
-				self.grid[branching_pos[1]+i][branching_pos[0]+1] = 15
+				self.grid[branching_pos[1]+i][branching_pos[0]-1] = 15
 		elif direction == "WEST":
-			self.grid[branching_pos[1]][branching_pos[0]] = 76
-			self.grid[branching_pos[1]-1][branching_pos[0]] = 776
+			self.grid[branching_pos[1]][branching_pos[0]] = 16#76
+			self.grid[branching_pos[1]-1][branching_pos[0]] = 16#776
 			for i in xrange(1,branching_length+2):
 				self.grid[branching_pos[1]][branching_pos[0]-i] = 16
-				self.grid[branching_pos[1]+1][branching_pos[0]-i] = 16
+				self.grid[branching_pos[1]-1][branching_pos[0]-i] = 16
 
 
 	def set_staircases(self):
@@ -597,12 +596,12 @@ class Dungeon:
 
 		print "* Finding path...",
 		start = time.time()
-		self.find_path_between_staircases()
+		#self.find_path_between_staircases()
 		end = time.time()
 		print "        DONE!   in " + str(round(end-start, 3)) + " seconds"
 
 		print "* Setting chests...",
 		start = time.time()
-		self.set_chests()
+		#self.set_chests()
 		end = time.time()
 		print "      DONE!   in " + str(round(end-start, 3)) + " seconds"
