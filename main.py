@@ -1146,7 +1146,7 @@ def onEvent():
 			if isWalking == False:
 				isWalking = True
 				playSound(sd_footstep,cam.getPosition(), 0.1)
-			me.translate(axis_lr*0.07,0,0,Space.Local)
+			me.(axis_lr*0.07,0,0,Space.Local)
 			me.getRigidBody().sync()
 			e.setProcessed()
 		if axis_ud>0.5 or axis_ud<-0.5:
@@ -1157,7 +1157,7 @@ def onEvent():
 			me.translate(0,0,axis_ud*0.07,Space.Local)
 			me.getRigidBody().sync()
 			e.setProcessed()
-		if axis_lr<0.5 and axis_lr>-0.5 and axir_ud<0.5 and axis_ud>0.5:
+		if axis_lr<0.5 and axis_lr>-0.5 and axis_ud<0.5 and axis_ud>0.5:
 			isWalking = False
 
 		if e.isButtonDown(EventFlags.Button7):
