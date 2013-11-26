@@ -118,9 +118,18 @@ Writing shaders in omegalib is somewhat different from doing in native OpenGL pr
 </ul><p>In this project, I wrote shaders for attaching texture to an entity in different ways.</p>
 
 <h3>
+<a name="generating-random-dungeons" class="anchor" href="#generating-random-dungeons"><span class="octicon octicon-link"></span></a>Generating Random Dungeons</h3>
+
+<p>The largest issue when implanting the random algorithm to CAVE2 was that each nodes uses different seed so they acutally generated different dungeons. See below.</p>
+
+<img src="100.png">
+
+<p>However, if we gave the program a fixed seed, it will generate same set of (different) dungeons everytime it runs. To solve this issue, I collected users movement and used it to generate a seed for next level. Since users' movement can be considered as random movement, we have a random seed for each generating. As for the first level, I used current time so we have a different first level each time</p>
+
+<h3>
 <a name="lighting" class="anchor" href="#lighting"><span class="octicon octicon-link"></span></a>Lighting</h3>
 
-<p>I also tried out simulating fire light and flashlight in cyclops</p>
+<p>I also tried out simulating fire light and flashlight in cyclops. There is some issue there so switching to flashlight won't work unless the 'character' moves around</p>
 
 <h3>
 <a name="bullet-physics" class="anchor" href="#bullet-physics"><span class="octicon octicon-link"></span></a>Bullet Physics</h3>
