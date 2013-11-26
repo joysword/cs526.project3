@@ -120,9 +120,9 @@ Writing shaders in omegalib is somewhat different from doing in native OpenGL pr
 <h3>
 <a name="generating-random-dungeons" class="anchor" href="#generating-random-dungeons"><span class="octicon octicon-link"></span></a>Generating Random Dungeons</h3>
 
-<p>The largest issue when implanting the random algorithm to CAVE2 was that each nodes uses different seed so they acutally generated different dungeons. See below.</p>
+<p>The largest issue when implanting the random algorithm to CAVE2 was that each nodes uses different seed so they acutally generated different dungeons. Below is a broken dungeon in bird's eye view.</p>
 
-<img src="100.png">
+<img src="broken.jpg">
 
 <p>However, if we gave the program a fixed seed, it will generate same set of (different) dungeons everytime it runs. To solve this issue, I collected users movement and used it to generate a seed for next level. Since users' movement can be considered as random movement, we have a random seed for each generating. As for the first level, I used current time so we have a different first level each time</p>
 
