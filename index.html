@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Now I can see clearly : rogue-like in CAVE2" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Now I can see clearly</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/joysword/cs526.project3">View on GitHub</a>
+
+          <h1 id="project_title">Now I can see clearly</h1>
+          <h2 id="project_tagline">rogue-like in CAVE2</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/joysword/cs526.project3/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/joysword/cs526.project3/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="welcome" class="anchor" href="#welcome"><span class="octicon octicon-link"></span></a>Welcome!</h1>
+
+<p>Welcome to the homepage of my third project of Fall 2013 Semester, <em>I Can See Clearly Now</em>, Project 3 of Professor <a href="http://www.evl.uic.edu/aej/">Andy Johnson</a>'s <a href="http://www.evl.uic.edu/aej/526/">Computer Graphics II</a> course.
+See also my <a href="http://joysword.github.io/cs526.project1/">Project 1</a> and <a href="http://joysword.github.io/cs526.project2/">Project 2</a></p>
+
+<h3>
+<a name="demo" class="anchor" href="#demo"><span class="octicon octicon-link"></span></a>Demo</h3>
+
+<h3>
+<a name="introduction" class="anchor" href="#introduction"><span class="octicon octicon-link"></span></a>Introduction</h3>
+
+<p>This project was proposed as a <a href="http://en.wikipedia.org/wiki/Roguelike">rogue-like</a> 'game' developed as a practice on multiple techniques for <a href="http://github.com/uic-evl/omegalib">omegalib</a> and <a href="http://www.evl.uic.edu/core.php?mod=4&amp;type=1&amp;indi=424">CAVE2</a>. The original proposal can be found <a href="https://sites.google.com/site/syin8uic/CS526/project3">here</a>.</p>
+
+<p>What I actually implemented include:</p>
+
+<ol>
+<li>Randomly generated dungeon levels</li>
+<li>GPU Shaders for textures</li>
+<li>Navigation using Wand</li>
+<li>Background music and environmental sound effects</li>
+<li>Environmental lighting and two kinds of artificial lighting</li>
+<li>Extended <a href="http://bulletphysics.org/wordpress/">Bullet</a> physics engine functionality in Omegalib applied in this project</li>
+</ol><h3>
+<a name="download-and-installation" class="anchor" href="#download-and-installation"><span class="octicon octicon-link"></span></a>Download and Installation</h3>
+
+<ol>
+<li>Have omegalib installed, with python support enabled and cyclops and omegaOsg modules added</li>
+<li>If you are using Mountain Lion or higher, you also need to have <a href="http://xquartz.macosforge.org/landing/">XQuartz</a> installed and running. If you are using Mavericks, you need to download Xcode 5 and command line tools.</li>
+<li>Download source code of this project from <a href="https://github.com/joysword/cs526.project3">Github</a> or on top of this page</li>
+<li>To run the project, using following commands:
+$ cd [omegalib_build]/bin/
+$ ./orun -s [where_you_put_this_project]/main.py</li>
+</ol><p>Note that to have the best experience, you need to run it on CAVE2. If you want one, you can buy one <a href="http://www.mechdyne.com/cave2.aspx">here</a></p>
+
+<h1>
+<a name="detail-description" class="anchor" href="#detail-description"><span class="octicon octicon-link"></span></a>Detail Description</h1>
+
+<h5>
+<a name="all-fatures-and-usages-discussed-here-are-for-running-this-app-on-cave2-if-not-noticed-otherwise" class="anchor" href="#all-fatures-and-usages-discussed-here-are-for-running-this-app-on-cave2-if-not-noticed-otherwise"><span class="octicon octicon-link"></span></a>all fatures and usages discussed here are for running this app on <a href="http://www.evl.uic.edu/core.php?mod=4&amp;type=1&amp;indi=424">CAVE2</a> if not noticed otherwise</h5>
+
+<h3>
+<a name="features-and-usage" class="anchor" href="#features-and-usage"><span class="octicon octicon-link"></span></a>Features and Usage</h3>
+
+<h4>
+<a name="dungeons-randomized" class="anchor" href="#dungeons-randomized"><span class="octicon octicon-link"></span></a>Dungeons Randomized</h4>
+
+<p>Each level of dungeon has random number of rooms of random sizes. Rooms are connected by tunnels at random positions and with random length. In each room there are 3-4 torches, which provide lighting, at random position of each side.</p>
+
+<h4>
+<a name="physics-attached" class="anchor" href="#physics-attached"><span class="octicon octicon-link"></span></a>Physics Attached</h4>
+
+<p>Floors and walls come with attached physics attributes so that the 'character' won't go through the wall. (Note that if you keep trying, you will be able go through walls due to the accuracy issue of physics calculation)</p>
+
+<h4>
+<a name="navigation-implemented" class="anchor" href="#navigation-implemented"><span class="octicon octicon-link"></span></a>Navigation Implemented</h4>
+
+<p>Currently what the 'character' can do is walking in the maze. I also implmented 'jumping' using physics but it is not really useful until creeps or monsters are put into this dungeon in the future. The 'character' starts from the room with staircases that coming from upper world and tries to find the other staircase that leads to a lower level of dungeon.</p>
+
+<p>There is also a chest in a random room but currently nothing is in it!</p>
+
+<p>To move the 'character' around, use analog stick of the Wand. To turn left or right, hold Button7 and move the Wand to the same direction that you want to turn to. To jump, press ButtonDown. If the 'character' falls, pressButtonUp to reset his orientation.</p>
+
+<h4>
+<a name="navigation-implement" class="anchor" href="#navigation-implement"><span class="octicon octicon-link"></span></a>Navigation Implement</h4>
+
+<h1>
+<a name="gains" class="anchor" href="#gains"><span class="octicon octicon-link"></span></a>Gains</h1>
+
+<h3>
+<a name="gpu-programming" class="anchor" href="#gpu-programming"><span class="octicon octicon-link"></span></a>GPU Programming</h3>
+
+<p>I took this project as an opportunity to pick up half of what I learned in GPU Programming course, writing shaders. And learned basic of writing shaders in omegalib.
+Writing shaders in omegalib is somewhat different from doing in native OpenGL programs, but the underlying principle and process are the same. Generally speaking, the uniqueness reflects in following aspects:</p>
+
+<ul>
+<li>omegalib provides multiple default structures and uniforms that users can assign value to in cyclops appllication</li>
+<li>omegalib provides multiple default shaders. Users in most times will only need to write a part of the whole process</li>
+</ul><p>In this project, I wrote shaders for attaching texture to an entity in different ways.</p>
+
+<h3>
+<a name="random-dungeon-generation" class="anchor" href="#random-dungeon-generation"><span class="octicon octicon-link"></span></a>Random Dungeon Generation</h3>
+
+<h3>
+<a name="lighting" class="anchor" href="#lighting"><span class="octicon octicon-link"></span></a>Lighting</h3>
+
+<p>I also tried out simulating fire light and flashlight.</p>
+
+<h3>
+<a name="bullet-physics" class="anchor" href="#bullet-physics"><span class="octicon octicon-link"></span></a>Bullet Physics</h3>
+
+<p>I continued working on Bullet Physics engine and added <code>RigidBody</code> for <code>PlaneShape</code>. <code>PlaneShape</code>'s are extensively used in building the dungeon.
+I also added <code>addCentralForce()</code> and <code>setLinearVelocity()</code> to current functionality set in cyclops because I thought they would be useful if the 'character' needs to kill creatures in the dungeon. Unfortunately, I haven't got a chance to add more fun stuff into my dungeon.</p>
+
+<h3>
+<a name="using-xbox-360-controller-as-input-device" class="anchor" href="#using-xbox-360-controller-as-input-device"><span class="octicon octicon-link"></span></a>*Using xbox 360 controller as input device</h3>
+
+<p>This has not been acquired 100%. I tried to implement handling events from xbox 360 controller because xbox 360 controller is probably more intuitive than the Wand in this setting. Although some experiments were done, I couldn't make everything work properly before deadline.</p>
+
+<h1>
+<a name="source-and-reference" class="anchor" href="#source-and-reference"><span class="octicon octicon-link"></span></a>Source and Reference</h1>
+
+<p>Sources and reference I used in this project:</p>
+
+<ul>
+<li>
+<a href="http://www.evl.uic.edu/aej/525/index.html">CS 525 Course Notes</a> (I used it to pick up GPU programming)</li>
+<li>
+<a href="http://encycolorpedia.com/f8c377">Encycolorpedia</a> (I used it to choose color for lighting)</li>
+<li>
+<a href="http://www.freesound.org">freesound.org</a> (I used it to find sound effects)</li>
+<li>
+<a href="https://jira.ai2.upv.es/confluence/download/attachments/13303823/Introduction+to+Ogre3D.pdf?version=1&amp;modificationDate=1317394839000">Introduction to OGRE3D</a> (I used it to choose parameters for lighting)</li>
+<li>
+<a href="http://www.lighthouse3d.com/tutorials/">lighthouse3d.com</a> (I used it to pick up GPU programming)</li>
+<li>
+<a href="http://graphics.cs.wisc.edu/WP/virtualreality11/category/netcave-project-description/">NetCave: Project Description</a> (I used it as the idea of this project)</li>
+<li>
+<a href="http://breinygames.blogspot.com/2011/07/random-map-generation.html">Random Dungeon Generations</a> (I used it as the foundation of generator)</li>
+<li>
+<a href="http://soundjay.com/">soundjay.com</a> (I used it to find sound effects)</li>
+</ul><h1>
+<a name="future-work" class="anchor" href="#future-work"><span class="octicon octicon-link"></span></a>Future Work</h1>
+
+<p>There are plenty of interesting things I thought of adding to the dungeon. I hope in the future I can make this dungeon more and more fun (by making it creepy and dangerous)</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Now I can see clearly maintained by <a href="https://github.com/joysword">joysword</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
