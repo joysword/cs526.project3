@@ -12,6 +12,7 @@ wandOldPos = None
 bgmDeltaT = 0
 inChannel = False
 tile = []
+inGame = False
 
 start_x = 0
 start_z = 0
@@ -48,7 +49,7 @@ class Texture:
 		self.torch.setDiffuseTexture('textures/wood1.jpg')
 
 		self.door = Material.create()
-		self.door.setDiffuseTexture('textures/door012.jpg')
+		self.door.setDiffuseTexture('textures/door.png')
 
 texture = Texture()
 
@@ -68,7 +69,7 @@ CHEST_WIDTH = 0.6
 CHEST_HEIGHT = 0.3
 CHEST_HALF_HEIGHT = CHEST_HEIGHT*0.5
 CHEST_DEEP = 0.35
-CHANNEL_HEIGHT = WALL_HEIGHT*0.68
+CHANNEL_HEIGHT = WALL_HEIGHT
 CHANNEL_HALF_HEIGHT = CHANNEL_HEIGHT*0.5
 
 HALF_PI = pi*0.5
@@ -134,12 +135,11 @@ light_flash = Light.create()
 light_flash.setLightType(LightType.Spot)
 light_flash.setColor(Color('#f8c377'))
 light_flash.setLightDirection(Vector3(0,0,-1))
-light_flash.setPosition(Vector3(0,0,0))
-light_flash.setSpotExponent(32)
-#light_flash.setSpotCutoff(10)
-light_flash.setSpotCutoff(5/180*pi)
+light_flash.setPosition(Vector3(0,0.5,0))
+light_flash.setSpotExponent(64)
+light_flash.setSpotCutoff(12)
 light_flash.setEnabled(False)
-cam.addChild(light_flash)
+me.addChild(light_flash)
 
 ## Create torchlight
 light_torch = Light.create()
@@ -148,7 +148,7 @@ light_torch.setColor(Color('#f8c377')) # Duren torchlight http://encycolorpedia.
 light_torch.setAttenuation(1, 0.22, 0.2)
 light_torch.setPosition(Vector3(0.1,2,-0.8))
 light_torch.setEnabled(True)
-cam.addChild(light_torch)
+me.addChild(light_torch)
 
 ##############################################################################################################
 # MODELS
@@ -225,7 +225,6 @@ class Torch:
 		self.support.getMaterial().setProgram('floor')
 		self.support_parent.addChild(self.support)
 
-
 		# self.text = BoxShape.create(0.1,0.1,0.1)
 		# self.text.setEffect('colored -e red')
 		# self.text.setPosition(0,0,0.5)
@@ -286,6 +285,8 @@ playSound(sd_bgm,cam.getPosition(),0.1)
 def removeAllChildren(sn):
 	if sn.numChildren()>0:
 		for i in xrange(sn.numChildren()):
+			chi = sn.getChildByIndex(0)
+			removeAllChildren(chi)
 			sn.removeChildByIndex(0)
 
 def generate_level():
@@ -293,10 +294,15 @@ def generate_level():
 	global torch_id
 	global level
 	global tile
+	global end_x
+	global end_z
+	global sn_root
 
 	playSound(sd_stair,cam.getPosition(),0.1)
 
 	removeAllChildren(sn_root)
+
+	print 'children removed'
 
 	random.seed(torch_id*level+19890101)
 
@@ -307,6 +313,8 @@ def generate_level():
 	tile = dungeon.grid
 
 	torch_id = 0
+
+	print 'start create geometries'
 
 	for z in xrange(TOTAL_DEEP):
 		for x in xrange(TOTAL_WIDTH):
@@ -630,13 +638,13 @@ def generate_level():
 				top.getMaterial().setProgram('floor')
 				sn_root.addChild(top)
 
-				# door = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
-				# door.setPosition(x,WALL_HALF_HEIGHT,z+TILE_HALF_WIDTH)
-				# door.clearMaterials()
-				# door.addMaterial(texture.door)
-				# door.getMaterial().setProgram('door_left')
-				# #door.setEffect('colored -e #00611c')
-				# sn_root.addChild(door)
+				door = PlaneShape.create(TILE_WIDTH*2,WALL_HEIGHT)
+				door.setPosition(x+TILE_HALF_WIDTH,WALL_HALF_HEIGHT,z+TILE_HALF_WIDTH)
+				door.clearMaterials()
+				door.addMaterial(texture.door)
+				door.getMaterial().setProgram('floor')
+				#door.setEffect('colored -e #00611c')
+				sn_root.addChild(door)
 
 				west = PlaneShape.create(TILE_WIDTH,CHANNEL_HEIGHT)
 				west.setPosition(x,0,z)
@@ -723,14 +731,14 @@ def generate_level():
 				top.getMaterial().setProgram('floor')
 				sn_root.addChild(top)
 
-				# door = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
-				# door.setPosition(x-TILE_HALF_WIDTH,WALL_HALF_HEIGHT,z)
-				# door.yaw(-HALF_PI)
-				# door.clearMaterials()
-				# door.addMaterial(texture.door)
-				# door.getMaterial().setProgram('door_left')
-				# #door.setEffect('colored -e #00611c')
-				# sn_root.addChild(door)
+				door = PlaneShape.create(TILE_WIDTH*2,WALL_HEIGHT)
+				door.setPosition(x-TILE_HALF_WIDTH,WALL_HALF_HEIGHT,z+TILE_HALF_WIDTH)
+				door.yaw(-HALF_PI)
+				door.clearMaterials()
+				door.addMaterial(texture.door)
+				door.getMaterial().setProgram('floor')
+				#door.setEffect('colored -e #00611c')
+				sn_root.addChild(door)
 
 				north = PlaneShape.create(TILE_WIDTH,CHANNEL_HEIGHT)
 				north.setPosition(x,0,z)
@@ -818,14 +826,14 @@ def generate_level():
 				top.getMaterial().setProgram('floor')
 				sn_root.addChild(top)
 
-				# door = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
-				# door.setPosition(x,WALL_HALF_HEIGHT,z-TILE_HALF_WIDTH)
-				# door.yaw(pi)
-				# door.clearMaterials()
-				# door.addMaterial(texture.door)
-				# door.getMaterial().setProgram('door_left')
-				# #door.setEffect('colored -e #00611c')
-				# sn_root.addChild(door)
+				door = PlaneShape.create(TILE_WIDTH*2,WALL_HEIGHT)
+				door.setPosition(x-TILE_HALF_WIDTH,WALL_HALF_HEIGHT,z-TILE_HALF_WIDTH)
+				door.yaw(pi)
+				door.clearMaterials()
+				door.addMaterial(texture.door)
+				door.getMaterial().setProgram('floor')
+				#door.setEffect('colored -e #00611c')
+				sn_root.addChild(door)
 
 				east = PlaneShape.create(TILE_WIDTH,CHANNEL_HEIGHT)
 				east.setPosition(x,0,z)
@@ -914,14 +922,14 @@ def generate_level():
 				top.getMaterial().setProgram('floor')
 				sn_root.addChild(top)
 
-				# door = PlaneShape.create(TILE_WIDTH,WALL_HEIGHT)
-				# door.setPosition(x+TILE_HALF_WIDTH,WALL_HALF_HEIGHT,z)
-				# door.yaw(HALF_PI)
-				# door.clearMaterials()
-				# door.addMaterial(texture.door)
-				# door.getMaterial().setProgram('door_left')
-				# #door.setEffect('colored -e #00611c')
-				# sn_root.addChild(door)
+				door = PlaneShape.create(TILE_WIDTH*2,WALL_HEIGHT)
+				door.setPosition(x+TILE_HALF_WIDTH,WALL_HALF_HEIGHT,z-TILE_HALF_WIDTH)
+				door.yaw(HALF_PI)
+				door.clearMaterials()
+				door.addMaterial(texture.door)
+				door.getMaterial().setProgram('floor')
+				#door.setEffect('colored -e #00611c')
+				sn_root.addChild(door)
 
 				south = PlaneShape.create(TILE_WIDTH,CHANNEL_HEIGHT)
 				south.setPosition(x,0,z)
@@ -986,10 +994,27 @@ def generate_level():
 				sn_upstair.setPosition(x,0,z)
 				me.setPosition(x,BODY_HALF_HEIGHT+0.05,z)
 				me.getRigidBody().sync()
+
+				ceil = PlaneShape.create(TILE_WIDTH,TILE_WIDTH)
+				ceil.setPosition(x,WALL_HEIGHT,z)
+				ceil.pitch(HALF_PI)
+				ceil.clearMaterials()
+				ceil.addMaterial(texture.ceil)
+				ceil.getMaterial().setProgram('floor')
+				sn_root.addChild(ceil)
 			elif ti==9: # downstairs
 				sn_downstair.setPosition(x,0,z)
+				print "x:",x,"z:",z
 				end_x = x
 				end_z = z
+
+				ceil = PlaneShape.create(TILE_WIDTH,TILE_WIDTH)
+				ceil.setPosition(x,WALL_HEIGHT,z)
+				ceil.pitch(HALF_PI)
+				ceil.clearMaterials()
+				ceil.addMaterial(texture.ceil)
+				ceil.getMaterial().setProgram('floor')
+				sn_root.addChild(ceil)
 			elif ti==10: # chest
 				floor = PlaneShape.create(TILE_WIDTH,TILE_WIDTH)
 				floor.setPosition(x,0,z)
@@ -1214,6 +1239,10 @@ def generate_level():
 	#ground.setEffect('colored -e red')
 	ground.setVisible(False)
 
+	print 'done'
+
+	inGame=True
+
 	#print me.getPosition()
 
 generate_level()
@@ -1330,37 +1359,37 @@ def onEvent():
 	# 		me.getRigidBody().applyCentralImpulse(Vector3(0,120,0))
 	# 		e.setProcessed()
 
-	# 	# change light
-	# 	if e.isKeyDown(ord('f')) or e.isButtonDown(EventFlags.Button5): # LB
-	# 		print e.getSourceId(), e.getServiceType()
-	# 		light_torch.setEnabled(not light_torch.isEnabled())
-	# 		light_flash.setEnabled(not light_flash.isEnabled())
-	# 		e.setProcessed()
+	# change light
+	if e.isKeyDown(ord('f')) or e.isButtonDown(EventFlags.Button5): # LB
+		print e.getSourceId(), e.getServiceType()
+		light_torch.setEnabled(not light_torch.isEnabled())
+		light_flash.setEnabled(not light_flash.isEnabled())
+		e.setProcessed()
 
 	if e.isKeyDown(ord('a')):
-		me.translate(-0.1,0,0,Space.Local)
+		me.translate(-0.2,0,0,Space.Local)
 		#print 'a'
 		me.getRigidBody().sync()
 		e.setProcessed()
 	elif e.isKeyDown(ord('s')):
-		me.translate(0,0,0.1,Space.Local)
+		me.translate(0,0,0.2,Space.Local)
 		#print 's'
 		me.getRigidBody().sync()
 		e.setProcessed()
 	elif e.isKeyDown(ord('d')):
-		me.translate(0.1,0,0,Space.Local)
+		me.translate(0.2,0,0,Space.Local)
 		#print 'd'
 		me.getRigidBody().sync()
 		e.setProcessed()
 	elif e.isKeyDown(ord('w')):
-		me.translate(0,0,-0.1,Space.Local)
+		me.translate(0,0,-0.2,Space.Local)
 		#print 'w'
 		me.getRigidBody().sync()
 		e.setProcessed()
 	elif e.isKeyDown(32):
 		#me.translate(0,0.5,0,Space.Local)
-		me.getRigidBody().applyCentralImpulse(Vector3(0,120,0))
-		#print 'space_bar'
+		me.getRigidBody().applyCentralImpulse(Vector3(0,240,0))
+		print 'space_bar'
 		e.setProcessed()
 
 	# 	e.setProcessed()
@@ -1386,15 +1415,18 @@ def onUpdate(frame, t, dt):
 	global bgmDeltaT
 	global tile
 	global inChannel
+	global inGame
 
 	#me.getRigidBody().sync()
 	#print me.getPosition()
 	if t>30 and scene.isPhysicsEnabled()==False:
 		print 'enabling physics'
 	 	scene.setPhysicsEnabled(True)
+	 	pp = me.getPosition()
+	 	me.setPosition(pp.z,BODY_HALF_HEIGHT+0.05,pp.z)
+	#print 'pos:',pos
 
 	pos = me.getPosition()
-	#print 'pos:',pos
 
 	num = 0
 	for i in xrange(0,torch_id):
@@ -1411,9 +1443,10 @@ def onUpdate(frame, t, dt):
 
 	#print 'num:',num
 
-	if dis_square(pos.x,pos.z,end_x, end_z)<2:
+	if dis_square(pos.x,pos.z,end_x, end_z)<3.5:
 		print 'contratulations!'
 		print 'entering new level!'
+		inGame = False
 		level+=1
 		generate_level()
 
@@ -1424,13 +1457,14 @@ def onUpdate(frame, t, dt):
 		playSound(sd_bgm,cam.getPosition(),0.1)
 
 	# play water dripping sound when entering channels
-	if inChannel==False:
-		if tile[int(pos.z)][int(pos.x)]==16 or tile[int(pos.z)][int(pos.x)]==13 or tile[int(pos.z)][int(pos.x)]==14 or tile[int(pos.z)][int(pos.x)]==15:
-			inChannel = True
-			playSound(sd_water,cam.getPosition(),0.1)
-	else:
-		if tile[int(pos.z)][int(pos.x)]!=16 and tile[int(pos.z)][int(pos.x)]!=13 and tile[int(pos.z)][int(pos.x)]!=14 and tile[int(pos.z)][int(pos.x)]!=15:
-			inChannel = False
+	if inGame:
+		if inChannel==False:
+			if tile[int(pos.z)][int(pos.x)]==16 or tile[int(pos.z)][int(pos.x)]==13 or tile[int(pos.z)][int(pos.x)]==14 or tile[int(pos.z)][int(pos.x)]==15:
+				inChannel = True
+				playSound(sd_water,cam.getPosition(),0.1)
+		else:
+			if tile[int(pos.z)][int(pos.x)]!=16 and tile[int(pos.z)][int(pos.x)]!=13 and tile[int(pos.z)][int(pos.x)]!=14 and tile[int(pos.z)][int(pos.x)]!=15:
+				inChannel = False
 
 setUpdateFunction(onUpdate)
 
