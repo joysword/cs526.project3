@@ -4,6 +4,7 @@ Welcome to the homepage of my third project of Fall 2013 Semester, *I Can See Cl
 See also my [Project 1](http://joysword.github.io/cs526.project1/) and [Project 2](http://joysword.github.io/cs526.project2/)
 
 ### Demo
+<iframe width="640" height="360" src="//www.youtube.com/embed/X5hXEx58iP4" frameborder="0" allowfullscreen></iframe>
 
 ### Introduction
 
@@ -46,8 +47,6 @@ There is also a chest in a random room but currently nothing is in it!
 
 To move the 'character' around, use analog stick of the Wand. To turn left or right, hold Button7 and move the Wand to the same direction that you want to turn to. To jump, press ButtonDown. If the 'character' falls, pressButtonUp to reset his orientation.
 
-#### Navigation Implement
-
 # Gains
 
 ### GPU Programming
@@ -58,8 +57,6 @@ Writing shaders in omegalib is somewhat different from doing in native OpenGL pr
 * omegalib provides multiple default shaders. Users in most times will only need to write a part of the whole process
 
 In this project, I wrote shaders for attaching texture to an entity in different ways.
-
-### Random Dungeon Generation
 
 ### Lighting
 I also tried out simulating fire light and flashlight.
