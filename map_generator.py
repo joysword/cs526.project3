@@ -550,7 +550,7 @@ class Dungeon:
 		average = 0
 		for i in distances:
 			average += i
-		average /= len(distances)-1
+		average /= len(distances)
 
 		possible_places = []
 		for y in range(0, len(map)):
@@ -602,6 +602,6 @@ class Dungeon:
 
 		print "* Setting chests...",
 		start = time.time()
-		#self.set_chests()
+		self.set_chests()
 		end = time.time()
 		print "      DONE!   in " + str(round(end-start, 3)) + " seconds"

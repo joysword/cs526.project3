@@ -1016,6 +1016,7 @@ def generate_level():
 				ceil.getMaterial().setProgram('floor')
 				sn_root.addChild(ceil)
 			elif ti==10: # chest
+				#print 'chest'
 				floor = PlaneShape.create(TILE_WIDTH,TILE_WIDTH)
 				floor.setPosition(x,0,z)
 				floor.pitch(-HALF_PI)
