@@ -112,8 +112,8 @@ cam = getDefaultCamera()
 me.addChild(cam)
 #cam.addChild(me)
 
-#cam.setPosition(0,-2-BODY_HALF_HEIGHT+EYE_HEIGHT,0)
-#cam.setControllerEnabled(False)
+cam.setPosition(0,-2-BODY_HALF_HEIGHT+EYE_HEIGHT,0)
+cam.setControllerEnabled(False)
 
 setNearFarZ(0.1,30)
 
@@ -1058,7 +1058,7 @@ def generate_level():
 
 			elif ti==8: # upstairs
 				sn_upstair.setPosition(x,0,z)
-				me.setPosition(x-1,BODY_HALF_HEIGHT,z-1)
+				me.setPosition(x,BODY_HALF_HEIGHT,z)
 				#cam.setPosition(x,BODY_HALF_HEIGHT,z)
 				me.getRigidBody().sync()
 
@@ -1373,31 +1373,52 @@ def onEvent():
 		#print 'Wand'
 		axis_lr = e.getAxis(0)
 		axis_ud = e.getAxis(1)
-		if axis_lr>0.5 or axis_lr<-0.5:
-			print 'axis_lr:',axis_lr
-			if isWalking == False:
-				isWalking = True
-				startWalking = True
-				playSound(sd_footstep,cam.getPosition(), 0.05)
+		# if axis_lr>0.5 or axis_lr<-0.5:
+		# 	print 'axis_lr:',axis_lr
+		# 	if isWalking == False:
+		# 		isWalking = True
+		# 		startWalking = True
+		# 		playSound(sd_footstep,cam.getPosition(), 0.05)
 
-			me.translate(0.05,0,0,Space.Local)
+		# 	me.translate(0.05,0,0,Space.Local)
+		# 	me.getRigidBody().sync()
+		# 	seedNumber+=2
+		# 	e.setProcessed()
+		# if axis_ud>0.5 or axis_ud<-0.5:
+		# 	print 'axis_ud:',axis_ud
+		# 	if isWalking == False:
+		# 		isWalking = True
+		# 		startWalking = True
+		# 		playSound(sd_footstep,cam.getPosition(), 0.05)
+		# 	me.translate(0,0,0.05,Space.Local)
+		# 	me.getRigidBody().sync()
+		# 	seedNumber+=1
+		# 	e.setProcessed()
+		# if axis_lr<0.5 and axis_lr>-0.5 and axis_ud<0.5 and axis_ud>0.5:
+		# 	isWalking = False
+
+		if e.isButtonDown(EventFlags.ButtonUp):
+			print 'ButtonUp down, moving'
+			me.translate(0,0,-0.05,Space.Local)
 			me.getRigidBody().sync()
-			seedNumber+=2
 			e.setProcessed()
-		if axis_ud>0.5 or axis_ud<-0.5:
-			print 'axis_ud:',axis_ud
-			if isWalking == False:
-				isWalking = True
-				startWalking = True
-				playSound(sd_footstep,cam.getPosition(), 0.05)
+		elif e.isButtonDown(EventFlags.ButtonLeft):
+			print 'ButtonLeft down, moving'
+			me.translate(-0.05,0,0,Space.Local)
+			me.getRigidBody().sync()
+			e.setProcessed()
+		elif e.isButtonDown(EventFlags.ButtonDown):
+			print 'ButtonDown down, moving'
 			me.translate(0,0,0.05,Space.Local)
 			me.getRigidBody().sync()
-			seedNumber+=1
 			e.setProcessed()
-		if axis_lr<0.5 and axis_lr>-0.5 and axis_ud<0.5 and axis_ud>0.5:
-			isWalking = False
+		elif e.isButtonDown(EventFlags.ButtonRight):
+			print 'ButtonRight down, moving'
+			me.translate(0.05,0,0,Space.Local)
+			me.getRigidBody().sync()
+			e.setProcessed()
 
-		if e.isButtonDown(EventFlags.Button7):
+		elif e.isButtonDown(EventFlags.Button7):
 			if isButton7down==False:
 				isButton7down = True
 				wandOldPos = e.getPosition()
@@ -1438,27 +1459,27 @@ def onEvent():
 			e.setProcessed()
 
 		# reset orientation
-		elif e.isButtonDown(EventFlags.ButtonUp):
-			print 'ButtonUp pressed, reseting orientation'
-			me.resetOrientation()
+		# elif e.isButtonDown(EventFlags.ButtonUp):
+		# 	print 'ButtonUp pressed, reseting orientation'
+		# 	me.resetOrientation()
 
 		# CHEAT go to destination
-		elif e.isButtonDown(EventFlags.ButtonLeft):# or e.isKeyDown(ord('o')):
-			print 'ButtonLeft pressed, going to destination'
-			me.setPosition(end_x-2,BODY_HALF_HEIGHT,end_z-2)
-			#me.resetOrientation()
-			me.getRigidBody().sync()
+		# elif e.isButtonDown(EventFlags.ButtonLeft):# or e.isKeyDown(ord('o')):
+		# 	print 'ButtonLeft pressed, going to destination'
+		# 	me.setPosition(end_x-2,BODY_HALF_HEIGHT,end_z-2)
+		# 	#me.resetOrientation()
+		# 	me.getRigidBody().sync()
 
 		# CHEAT go to chests
-		elif e.isButtonDown(EventFlags.ButtonRight):# or e.isKeyDown(ord('p')):
-			print 'ButtonRight pressed, going to next chest'
-			if at_chest>=len(chest_list):
-				at_chest = 0
-			pos = chest_list[at_chest].getPosition()
-			at_chest+=1
-			me.setPosition(pos.x,BODY_HALF_HEIGHT,pos.z)
-			#me.resetOrientation()
-			me.getRigidBody().sync()
+		# elif e.isButtonDown(EventFlags.ButtonRight):# or e.isKeyDown(ord('p')):
+		# 	print 'ButtonRight pressed, going to next chest'
+		# 	if at_chest>=len(chest_list):
+		# 		at_chest = 0
+		# 	pos = chest_list[at_chest].getPosition()
+		# 	at_chest+=1
+		# 	me.setPosition(pos.x,BODY_HALF_HEIGHT,pos.z)
+		# 	#me.resetOrientation()
+		# 	me.getRigidBody().sync()
 
 	# if e.getSourceId()==1:
 
@@ -1568,8 +1589,8 @@ def onUpdate(frame, t, dt):
 		print 'enabling physics'
 		pp = me.getPosition()
 		me.setPosition(pp.z,BODY_HALF_HEIGHT,pp.z)
+		me.getRigidBody().sync()
 	 	scene.setPhysicsEnabled(True)
-	print 'pos:',pos
 
 	pos = me.getPosition()
 
