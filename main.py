@@ -99,8 +99,7 @@ sn_root = SceneNode.create('root')
 ## Create player character - a box
 # TO DO: a cylinder
 
-#sn_player = SceneNode.create('player')
-me = BoxShape.create(0.4,BODY_HEIGHT,0.3)
+me = BoxShape.create(0.4,BODY_HEIGHT,0.4)
 #me.setEffect('colored -e red')
 #me.setBoundingBoxVisible(True)
 me.getRigidBody().initialize(RigidBodyType.Box, BODY_WEIGHT)
@@ -109,29 +108,25 @@ me.setVisible(False)
 
 #me.setPosition(50,BODY_HALF_HEIGHT,40)
 
-#sn_player.addChild(me)
 cam = getDefaultCamera()
 me.addChild(cam)
 #cam.addChild(me)
 
-cam.setPosition(0,-2-BODY_HALF_HEIGHT+EYE_HEIGHT,0)
-cam.setControllerEnabled(False)
+#cam.setPosition(0,-2-BODY_HALF_HEIGHT+EYE_HEIGHT,0)
+#cam.setControllerEnabled(False)
 
 setNearFarZ(0.1,30)
 
 # if (0):
-# 	#cam.setPosition(TOTAL_WIDTH/2,20,TOTAL_DEEP/2)
-# 	#cam.pitch(-HALF_PI)
-# 	me.setPosition(TOTAL_WIDTH/2,20,TOTAL_DEEP/2)
-# 	me.pitch(-HALF_PI)
-# 	me.getRigidBody().sync()
-# 	#sn_player.setPosition(50,50,40)
-# 	#sn_player.pitch(-HALF_PI)
+# 	cam.setPosition(TOTAL_WIDTH/2,20,TOTAL_DEEP/2)
+# 	cam.pitch(-HALF_PI)
+# 	# me.setPosition(TOTAL_WIDTH/2,20,TOTAL_DEEP/2)
+# 	# me.pitch(-HALF_PI)
+# 	# me.getRigidBody().sync()
 # else:
-#  	#cam.setPosition(TOTAL_WIDTH/2,0,TOTAL_DEEP/2)
-#  	me.setPosition(TOTAL_WIDTH/2,BODY_HALF_HEIGHT+0.05,TOTAL_DEEP/2)
-#  	me.getRigidBody().sync()
-#  	#sn_player.setPosition(50,0,40)
+#  	cam.setPosition(TOTAL_WIDTH/2,0,TOTAL_DEEP/2)
+#  	# me.setPosition(TOTAL_WIDTH/2,BODY_HALF_HEIGHT,TOTAL_DEEP/2)
+#  	# me.getRigidBody().sync()
 
 ##############################################################################################################
 # LIGHTING
@@ -163,6 +158,7 @@ light_torch.setAttenuation(1, 0.22, 0.2)
 light_torch.setPosition(Vector3(0.1,2,-0.8))
 light_torch.setEnabled(True)
 me.addChild(light_torch)
+#cam.addChild(light_torch)
 
 ##############################################################################################################
 # MODELS
@@ -208,7 +204,7 @@ class Chest():
 
 		self.chest = BoxShape.create(CHEST_WIDTH,CHEST_HEIGHT,CHEST_DEEP)
 		self.chest.setPosition(0,CHEST_HALF_HEIGHT,0)
-		self.chest.setEffect('texturedself. -d textures/wood1.jpg')
+		self.chest.setEffect('textured -d textures/wood1.jpg')
 		self.parent.addChild(self.chest)
 
 	def get(self):
@@ -342,7 +338,7 @@ def generate_level():
 
 	global inGame
 
-	playSound(sd_stair,cam.getPosition(),0.1)
+	playSound(sd_stair,cam.getPosition(),0.05)
 
 	removeAllChildren(sn_root)
 
@@ -1062,7 +1058,8 @@ def generate_level():
 
 			elif ti==8: # upstairs
 				sn_upstair.setPosition(x,0,z)
-				me.setPosition(x,BODY_HALF_HEIGHT+0.05,z)
+				me.setPosition(x-1,BODY_HALF_HEIGHT,z-1)
+				#cam.setPosition(x,BODY_HALF_HEIGHT,z)
 				me.getRigidBody().sync()
 
 				ceil = PlaneShape.create(TILE_WIDTH,TILE_WIDTH)
@@ -1100,6 +1097,14 @@ def generate_level():
 				sn_root.addChild(chest.get())
 
 				chest_list.append(chest.get())
+
+				ceil = PlaneShape.create(TILE_WIDTH,TILE_WIDTH)
+				ceil.setPosition(x,WALL_HEIGHT,z)
+				ceil.pitch(HALF_PI)
+				ceil.clearMaterials()
+				ceil.addMaterial(texture.ceil)
+				ceil.getMaterial().setProgram('floor')
+				sn_root.addChild(ceil)
 
 	###### CHANNEL #######
 			elif ti==13: # channel to north
@@ -1365,27 +1370,27 @@ def onEvent():
 	e = getEvent()
 
 	if e.getServiceType()==ServiceType.Wand:
-		print 'Wand'
+		#print 'Wand'
 		axis_lr = e.getAxis(0)
 		axis_ud = e.getAxis(1)
 		if axis_lr>0.5 or axis_lr<-0.5:
-			#print 'RIGHT LEFT'
+			print 'axis_lr:',axis_lr
 			if isWalking == False:
 				isWalking = True
 				startWalking = True
-				playSound(sd_footstep,cam.getPosition(), 0.1)
+				playSound(sd_footstep,cam.getPosition(), 0.05)
 
-			me.translate(axis_lr*0.07,0,0,Space.Local)
+			me.translate(0.05,0,0,Space.Local)
 			me.getRigidBody().sync()
 			seedNumber+=2
 			e.setProcessed()
 		if axis_ud>0.5 or axis_ud<-0.5:
-			#print 'UP DOWN'
+			print 'axis_ud:',axis_ud
 			if isWalking == False:
 				isWalking = True
 				startWalking = True
-				playSound(sd_footstep,cam.getPosition(), 0.1)
-			me.translate(0,0,axis_ud*0.07,Space.Local)
+				playSound(sd_footstep,cam.getPosition(), 0.05)
+			me.translate(0,0,0.05,Space.Local)
 			me.getRigidBody().sync()
 			seedNumber+=1
 			e.setProcessed()
@@ -1405,9 +1410,10 @@ def onEvent():
 
 		# interact
 		elif e.isButtonDown(EventFlags.Button2):
+			print 'Button2 pressed, interacting'
 			for i in xrange(len(door_list)):
 				posDoor = door_list[i].getPosition()
-				if dis_square(posDoor.x,posDoor.z,me.getPosition().x,me.getPosition().z)<6.25:
+				if dis_square(posDoor.x,posDoor.z,me.getPosition().x,me.getPosition().z)<7:
 					open_door(door_list[i])
 					break
 
@@ -1425,13 +1431,34 @@ def onEvent():
 			e.setProcessed()
 
 		elif e.isButtonDown(EventFlags.Button5):
+			print 'Button5 pressed, changing light'
 			light_torch.setEnabled(not light_torch.isEnabled())
 			light_flash.setEnabled(not light_flash.isEnabled())
+			scene.reloadAndRecompileShaders()
 			e.setProcessed()
 
 		# reset orientation
 		elif e.isButtonDown(EventFlags.ButtonUp):
+			print 'ButtonUp pressed, reseting orientation'
 			me.resetOrientation()
+
+		# CHEAT go to destination
+		elif e.isButtonDown(EventFlags.ButtonLeft):# or e.isKeyDown(ord('o')):
+			print 'ButtonLeft pressed, going to destination'
+			me.setPosition(end_x-2,BODY_HALF_HEIGHT,end_z-2)
+			#me.resetOrientation()
+			me.getRigidBody().sync()
+
+		# CHEAT go to chests
+		elif e.isButtonDown(EventFlags.ButtonRight):# or e.isKeyDown(ord('p')):
+			print 'ButtonRight pressed, going to next chest'
+			if at_chest>=len(chest_list):
+				at_chest = 0
+			pos = chest_list[at_chest].getPosition()
+			at_chest+=1
+			me.setPosition(pos.x,BODY_HALF_HEIGHT,pos.z)
+			#me.resetOrientation()
+			me.getRigidBody().sync()
 
 	# if e.getSourceId()==1:
 
@@ -1474,13 +1501,6 @@ def onEvent():
 	# 		me.getRigidBody().applyCentralImpulse(Vector3(0,120,0))
 	# 		e.setProcessed()
 
-	# change light
-	if e.isKeyDown(ord('f')) or e.isButtonDown(EventFlags.Button5): # LB
-		print e.getSourceId(), e.getServiceType()
-		light_torch.setEnabled(not light_torch.isEnabled())
-		light_flash.setEnabled(not light_flash.isEnabled())
-		scene.reloadAndRecompileShaders()
-		e.setProcessed()
 
 	if e.isKeyDown(ord('a')):
 		me.translate(-0.05,0,0,Space.Local)
@@ -1507,22 +1527,6 @@ def onEvent():
 	# 	me.getRigidBody().applyCentralImpulse(Vector3(0,240,0))
 	# 	print 'space_bar'
 	# 	e.setProcessed()
-
-	# CHEAT go to destination
-	elif e.isButtonDown(EventFlags.ButtonLeft) or e.isKeyDown(ord('o')):
-		me.setPosition(end_x,BODY_HALF_HEIGHT,end_z-2)
-		#me.resetOrientation()
-		me.getRigidBody().sync()
-
-	# CHEAT go to chests
-	elif e.isButtonDown(EventFlags.ButtonRight) or e.isKeyDown(ord('p')):
-		if at_chest>=len(chest_list):
-			at_chest = 0
-		pos = chest_list[at_chest].getPosition()
-		at_chest+=1
-		me.setPosition(pos.x,BODY_HALF_HEIGHT,pos.z)
-		#me.resetOrientation()
-		me.getRigidBody().sync()
 
 	# interact
 	elif e.isKeyDown(ord('e')):
@@ -1559,12 +1563,13 @@ def onUpdate(frame, t, dt):
 
 	#me.getRigidBody().sync()
 	#print me.getPosition()
+	
 	if inGame and scene.isPhysicsEnabled()==False:
 		print 'enabling physics'
 		pp = me.getPosition()
-		me.setPosition(pp.z,BODY_HALF_HEIGHT+0.05,pp.z)
+		me.setPosition(pp.z,BODY_HALF_HEIGHT,pp.z)
 	 	scene.setPhysicsEnabled(True)
-	#print 'pos:',pos
+	print 'pos:',pos
 
 	pos = me.getPosition()
 
@@ -1630,10 +1635,12 @@ def onUpdate(frame, t, dt):
 		if inChannel==False:
 			if tile[int(pos.z)][int(pos.x)]==16 or tile[int(pos.z)][int(pos.x)]==13 or tile[int(pos.z)][int(pos.x)]==14 or tile[int(pos.z)][int(pos.x)]==15:
 				inChannel = True
+				print 'inChannel', inChannel
 				playSound(sd_water,cam.getPosition(),0.3)
 		else:
 			if tile[int(pos.z)][int(pos.x)]!=16 and tile[int(pos.z)][int(pos.x)]!=13 and tile[int(pos.z)][int(pos.x)]!=14 and tile[int(pos.z)][int(pos.x)]!=15:
 				inChannel = False
+				print 'inChannel', inChannel
 
 	if isWalking:
 		if startWalking:
@@ -1641,9 +1648,11 @@ def onUpdate(frame, t, dt):
 			startWalking = False
 		else:
 			if t>start_walking_t+2.1:
-				playSound(sd_footstep,cam.getPosition(), 0.1)
+				playSound(sd_footstep,cam.getPosition(), 0.05)
 				start_walking_t = t
 
 setUpdateFunction(onUpdate)
+
+#cam.setPosition(me.getPosition())
 
 
