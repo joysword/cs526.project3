@@ -8,11 +8,21 @@ from map_generator import *
 torch_id = 0
 isButton7down = False
 isWalking = False
+startWalking = False
+start_walking_t = 0
 wandOldPos = None
 bgmDeltaT = 0
 inChannel = False
 tile = []
 inGame = False
+
+door_list = []
+
+chest_list = []
+
+at_chest = 0
+
+seedNumber = 19890101
 
 start_x = 0
 start_z = 0
@@ -26,6 +36,9 @@ nearest_torch_1 = 1
 nearest_torch_2 = 2
 nearest_torch_3 = 3
 nearest_torch_4 = 4
+
+def dis_square(x1,y1,x2,y2):
+	return (x1-x2)*(x1-x2)+(y1-y2)*(y1-y2)
 
 class Texture:
 	def __init__(self):
@@ -74,7 +87,7 @@ CHANNEL_HALF_HEIGHT = CHANNEL_HEIGHT*0.5
 
 HALF_PI = pi*0.5
 
-GRAVITY = -9.8
+GRAVITY = 0
 
 scene = getSceneManager()
 scene.setBackgroundColor(Color(0, 0, 0, 1))
@@ -104,7 +117,7 @@ me.addChild(cam)
 cam.setPosition(0,-2-BODY_HALF_HEIGHT+EYE_HEIGHT,0)
 cam.setControllerEnabled(False)
 
-setNearFarZ(0.1,100)
+setNearFarZ(0.1,30)
 
 # if (0):
 # 	#cam.setPosition(TOTAL_WIDTH/2,20,TOTAL_DEEP/2)
@@ -134,9 +147,10 @@ setNearFarZ(0.1,100)
 light_flash = Light.create()
 light_flash.setLightType(LightType.Spot)
 light_flash.setColor(Color('#f8c377'))
-light_flash.setLightDirection(Vector3(0,0,-1))
-light_flash.setPosition(Vector3(0,0.5,0))
+light_flash.setLightDirection(Vector3(0,0.03,-1))
+light_flash.setPosition(Vector3(0,0.48,0))
 light_flash.setSpotExponent(64)
+light_flash.setAttenuation(1, 0.02, 0.02)
 light_flash.setSpotCutoff(12)
 light_flash.setEnabled(False)
 me.addChild(light_flash)
@@ -188,23 +202,26 @@ downstair3.setPosition(0,STAIR_HEIGHT,-STAIR_HALF_HEIGHT)
 downstair2.addChild(downstair3)
 
 ## CHEST
-sn_chest = SceneNode.create('chest')
-#sn_root.addChild(sn_chest)
+class Chest():
+	def __init__(self,id):
+		self.parent = SceneNode.create('chest'+str(id))
 
-chest = BoxShape.create(CHEST_WIDTH,CHEST_HEIGHT,CHEST_DEEP)
-chest.setPosition(0,CHEST_HALF_HEIGHT,0)
-chest.setEffect('textured -d textures/wood1.jpg')
-sn_chest.addChild(chest)
+		self.chest = BoxShape.create(CHEST_WIDTH,CHEST_HEIGHT,CHEST_DEEP)
+		self.chest.setPosition(0,CHEST_HALF_HEIGHT,0)
+		self.chest.setEffect('texturedself. -d textures/wood1.jpg')
+		self.parent.addChild(self.chest)
+
+	def get(self):
+		return self.parent
 
 ## TORCH class
 class Torch:
 
 	global texture
-	global sn_root
 
 	def __init__(self, id):
 		self.parent = SceneNode.create('torch'+str(id))
-		sn_root.addChild(self.parent)
+		#sn_root.addChild(self.parent)
 
 		self.bot = CylinderShape.create(0.2,0.03,0.03,4,32)
 		self.bot.setPosition(0,1.4,TILE_HALF_WIDTH)
@@ -289,6 +306,26 @@ def removeAllChildren(sn):
 			removeAllChildren(chi)
 			sn.removeChildByIndex(0)
 
+def generate_level_only_delete():
+	global me
+	global torch_id
+	global level
+	global tile
+	global end_x
+	global end_z
+	global sn_root
+
+	global inGame
+
+	inGame = False
+
+	removeAllChildren(sn_root)
+
+	print 'children removed'
+
+def setSeed(se):
+	random.seed(se)
+
 def generate_level():
 	global me
 	global torch_id
@@ -298,13 +335,30 @@ def generate_level():
 	global end_z
 	global sn_root
 
+	global seedNumber
+	global door_list
+	global chest_list
+	global at_chest
+
+	global inGame
+
 	playSound(sd_stair,cam.getPosition(),0.1)
 
 	removeAllChildren(sn_root)
 
 	print 'children removed'
 
-	random.seed(torch_id*level+19890101)
+	#if level == 0:
+	if isMaster():
+		#seedNumber = datetime.datetime.now()
+		seedNumber = int(time.time())
+		print 'current seed:', seedNumber
+		broadcastCommand('setSeed('+str(seedNumber)+')')
+	# else:
+	# 	print 'current seed:', seedNumber
+	# 	random.seed(seedNumber)
+
+	seedNumber = 0
 
 	dungeon = Dungeon((TOTAL_WIDTH, TOTAL_DEEP), "Neverland", 30, (7, 7), (14, 14), (8, 8))
 	dungeon.generate_dungeon()
@@ -314,7 +368,11 @@ def generate_level():
 
 	torch_id = 0
 
-	print 'start create geometries'
+	print 'start creating geometries'
+
+	door_list = []
+	chest_list = []
+	at_chest = 0
 
 	for z in xrange(TOTAL_DEEP):
 		for x in xrange(TOTAL_WIDTH):
@@ -643,7 +701,10 @@ def generate_level():
 				door.clearMaterials()
 				door.addMaterial(texture.door)
 				door.getMaterial().setProgram('floor')
+				door.getRigidBody().initialize(RigidBodyType.Plane, 0)
+				door.getRigidBody().sync()
 				#door.setEffect('colored -e #00611c')
+				door_list.append(door)
 				sn_root.addChild(door)
 
 				west = PlaneShape.create(TILE_WIDTH,CHANNEL_HEIGHT)
@@ -737,7 +798,10 @@ def generate_level():
 				door.clearMaterials()
 				door.addMaterial(texture.door)
 				door.getMaterial().setProgram('floor')
+				door.getRigidBody().initialize(RigidBodyType.Plane, 0)
+				door.getRigidBody().sync()
 				#door.setEffect('colored -e #00611c')
+				door_list.append(door)
 				sn_root.addChild(door)
 
 				north = PlaneShape.create(TILE_WIDTH,CHANNEL_HEIGHT)
@@ -832,7 +896,10 @@ def generate_level():
 				door.clearMaterials()
 				door.addMaterial(texture.door)
 				door.getMaterial().setProgram('floor')
+				door.getRigidBody().initialize(RigidBodyType.Plane, 0)
+				door.getRigidBody().sync()
 				#door.setEffect('colored -e #00611c')
+				door_list.append(door)
 				sn_root.addChild(door)
 
 				east = PlaneShape.create(TILE_WIDTH,CHANNEL_HEIGHT)
@@ -928,7 +995,10 @@ def generate_level():
 				door.clearMaterials()
 				door.addMaterial(texture.door)
 				door.getMaterial().setProgram('floor')
+				door.getRigidBody().initialize(RigidBodyType.Plane, 0)
+				door.getRigidBody().sync()
 				#door.setEffect('colored -e #00611c')
+				door_list.append(door)
 				sn_root.addChild(door)
 
 				south = PlaneShape.create(TILE_WIDTH,CHANNEL_HEIGHT)
@@ -1024,7 +1094,12 @@ def generate_level():
 				floor.addMaterial(texture.floor)
 				floor.getMaterial().setProgram('floor')
 				sn_root.addChild(floor)
-				sn_chest.setPosition(x,0,z)
+
+				chest = Chest(len(chest_list))
+				chest.get().setPosition(x,0,z)
+				sn_root.addChild(chest.get())
+
+				chest_list.append(chest.get())
 
 	###### CHANNEL #######
 			elif ti==13: # channel to north
@@ -1251,6 +1326,28 @@ generate_level()
 ##############################################################################################################
 # EVENT FUNCTION
 
+def open_door(door):
+	global door_list
+	print 'door current pos:', door.getPosition()
+	door.translate(-1,0,-1,Space.Local)
+	#door.setPosition(Vector3(pos.x-1, pos.y, pos.z-1))
+	print 'door current pos:', door.getPosition()
+	door.yaw(-HALF_PI)
+	door.getRigidBody().sync()
+	#door.yaw(HALF_PI)
+	# interp = InterpolActor(door)
+	# interp.setTransitionType(InterpolActor.LINEAR)
+	# interp.setDuration(2)
+	# interp.setOperation(InterpolActor.POSITION | InterpolActor.ORIENT)
+	# interp.setTargetPosition(Vector3(pos.x-1, pos.y, pos.z-1))
+	# interp.setTargetOrientation(ori)
+	# interp.startInterpolation()
+	#print 'start interpolation'
+	print 'door opened'
+
+	door_list.remove(door)
+
+
 def onEvent():
 	global me
 	global isButton7down
@@ -1258,6 +1355,12 @@ def onEvent():
 	global isWalking
 	global end_x
 	global end_z
+
+	global seedNumber
+	global door_list
+
+	global chest_list
+	global at_chest
 
 	e = getEvent()
 
@@ -1269,17 +1372,22 @@ def onEvent():
 			#print 'RIGHT LEFT'
 			if isWalking == False:
 				isWalking = True
+				startWalking = True
 				playSound(sd_footstep,cam.getPosition(), 0.1)
+
 			me.translate(axis_lr*0.07,0,0,Space.Local)
 			me.getRigidBody().sync()
+			seedNumber+=2
 			e.setProcessed()
 		if axis_ud>0.5 or axis_ud<-0.5:
 			#print 'UP DOWN'
 			if isWalking == False:
 				isWalking = True
+				startWalking = True
 				playSound(sd_footstep,cam.getPosition(), 0.1)
 			me.translate(0,0,axis_ud*0.07,Space.Local)
 			me.getRigidBody().sync()
+			seedNumber+=1
 			e.setProcessed()
 		if axis_lr<0.5 and axis_lr>-0.5 and axis_ud<0.5 and axis_ud>0.5:
 			isWalking = False
@@ -1295,9 +1403,19 @@ def onEvent():
 			#print 'upup'
 			e.setProcessed()
 
-		elif e.isButtonDown(EventFlags.ButtonDown):
-			me.getRigidBody().applyCentralImpulse(Vector3(0,240,0))
-	 		e.setProcessed()
+		# interact
+		elif e.isButtonDown(EventFlags.Button2):
+			for i in xrange(len(door_list)):
+				posDoor = door_list[i].getPosition()
+				if dis_square(posDoor.x,posDoor.z,me.getPosition().x,me.getPosition().z)<6.25:
+					open_door(door_list[i])
+					break
+
+		# jump
+		# elif e.isButtonDown(EventFlags.ButtonDown):
+		# 	seedNumber-=3
+		# 	me.getRigidBody().applyCentralImpulse(Vector3(0,240,0))
+		#	e.setProcessed()
 
 	 	elif isButton7down:
 			trans = wandOldPos-e.getPosition()
@@ -1311,13 +1429,9 @@ def onEvent():
 			light_flash.setEnabled(not light_flash.isEnabled())
 			e.setProcessed()
 
+		# reset orientation
 		elif e.isButtonDown(EventFlags.ButtonUp):
 			me.resetOrientation()
-
-		elif e.isButtonDown(EventFlags.ButtonLeft):
-			me.setPosition(end_x,end_z-2)
-			me.resetOrientation()
-			me.getRigidBody().sync()
 
 	# if e.getSourceId()==1:
 
@@ -1365,33 +1479,58 @@ def onEvent():
 		print e.getSourceId(), e.getServiceType()
 		light_torch.setEnabled(not light_torch.isEnabled())
 		light_flash.setEnabled(not light_flash.isEnabled())
+		scene.reloadAndRecompileShaders()
 		e.setProcessed()
 
 	if e.isKeyDown(ord('a')):
-		me.translate(-0.2,0,0,Space.Local)
+		me.translate(-0.05,0,0,Space.Local)
 		#print 'a'
 		me.getRigidBody().sync()
 		e.setProcessed()
 	elif e.isKeyDown(ord('s')):
-		me.translate(0,0,0.2,Space.Local)
+		me.translate(0,0,0.05,Space.Local)
 		#print 's'
 		me.getRigidBody().sync()
 		e.setProcessed()
 	elif e.isKeyDown(ord('d')):
-		me.translate(0.2,0,0,Space.Local)
+		me.translate(0.05,0,0,Space.Local)
 		#print 'd'
 		me.getRigidBody().sync()
 		e.setProcessed()
 	elif e.isKeyDown(ord('w')):
-		me.translate(0,0,-0.2,Space.Local)
+		me.translate(0,0,-0.05,Space.Local)
 		#print 'w'
 		me.getRigidBody().sync()
 		e.setProcessed()
-	elif e.isKeyDown(32):
-		#me.translate(0,0.5,0,Space.Local)
-		me.getRigidBody().applyCentralImpulse(Vector3(0,240,0))
-		print 'space_bar'
-		e.setProcessed()
+	# elif e.isKeyDown(32):
+	# 	#me.translate(0,0.5,0,Space.Local)
+	# 	me.getRigidBody().applyCentralImpulse(Vector3(0,240,0))
+	# 	print 'space_bar'
+	# 	e.setProcessed()
+
+	# CHEAT go to destination
+	elif e.isButtonDown(EventFlags.ButtonLeft) or e.isKeyDown(ord('o')):
+		me.setPosition(end_x,BODY_HALF_HEIGHT,end_z-2)
+		#me.resetOrientation()
+		me.getRigidBody().sync()
+
+	# CHEAT go to chests
+	elif e.isButtonDown(EventFlags.ButtonRight) or e.isKeyDown(ord('p')):
+		if at_chest>=len(chest_list):
+			at_chest = 0
+		pos = chest_list[at_chest].getPosition()
+		at_chest+=1
+		me.setPosition(pos.x,BODY_HALF_HEIGHT,pos.z)
+		#me.resetOrientation()
+		me.getRigidBody().sync()
+
+	# interact
+	elif e.isKeyDown(ord('e')):
+		for i in xrange(len(door_list)):
+			posDoor = door_list[i].getPosition()
+			if dis_square(posDoor.x,posDoor.z,me.getPosition().x,me.getPosition().z)<4:
+				open_door(door_list[i])
+				break
 
 	# 	e.setProcessed()
 
@@ -1404,9 +1543,6 @@ setEventFunction(onEvent)
 ##############################################################################################################
 # UPDATE FUNCTION
 
-def dis_square(x1,y1,x2,y2):
-	return (x1-x2)*(x1-x2)+(y1-y2)*(y1-y2)
-
 def onUpdate(frame, t, dt):
 	global torch_id
 	global me
@@ -1417,38 +1553,70 @@ def onUpdate(frame, t, dt):
 	global tile
 	global inChannel
 	global inGame
+	global isWalking
+	global startWalking
+	global start_walking_t
 
 	#me.getRigidBody().sync()
 	#print me.getPosition()
-	if t>30 and scene.isPhysicsEnabled()==False:
+	if inGame and scene.isPhysicsEnabled()==False:
 		print 'enabling physics'
+		pp = me.getPosition()
+		me.setPosition(pp.z,BODY_HALF_HEIGHT+0.05,pp.z)
 	 	scene.setPhysicsEnabled(True)
-	 	pp = me.getPosition()
-	 	me.setPosition(pp.z,BODY_HALF_HEIGHT+0.05,pp.z)
 	#print 'pos:',pos
 
 	pos = me.getPosition()
 
-	num = 0
-	for i in xrange(0,torch_id):
-		tor = sn_root.getChildByName('torch'+str(i)) # SceneNode
-		fire = tor.getChildByName('support'+str(i)).getChildByIndex(0).getChildByIndex(0) # Light
-		pos1 = fire.convertLocalToWorldPosition(Vector3(0,0,0))
-		if dis_square(pos1.x,pos1.z,pos.x,pos.z)<100:
-			fire.setEnabled(True)
-			num+=1
-			#print 'true'
-		else:
+	close_torch = []
+	if inGame==True:
+		num = 0
+		#print 'torch_id:',torch_id
+		for i in xrange(0,torch_id):
+			tor = sn_root.getChildByName('torch'+str(i)) # SceneNode
+			fire = tor.getChildByName('support'+str(i)).getChildByIndex(0).getChildByIndex(0) # Light
+			pos1 = fire.convertLocalToWorldPosition(Vector3(0,0,0))
+			dis = dis_square(pos1.x,pos1.z,pos.x,pos.z)
+			if dis<140:
+				close_torch.append((dis,i))
+				num+=1
+				#print 'true'
 			fire.setEnabled(False)
-			#print 'false'
+				#print 'false'
+		#print 'traverse finished'
+
+		close_torch.sort()
+
+		#print close_torch
+
+		#print 'num:', num
+		if num<5:
+			for i in xrange(0,num):
+				tor = sn_root.getChildByName('torch'+str(close_torch[i][1]))
+				fire = tor.getChildByName('support'+str(close_torch[i][1])).getChildByIndex(0).getChildByIndex(0)
+				fire.setEnabled(True)
+		else:
+			for i in xrange(5,num):
+				tor = sn_root.getChildByName('torch'+str(close_torch[i][1]))
+				fire = tor.getChildByName('support'+str(close_torch[i][1])).getChildByIndex(0).getChildByIndex(0)
+				fire.setEnabled(False)
+			for i in xrange(0,5):
+				tor = sn_root.getChildByName('torch'+str(close_torch[i][1]))
+				fire = tor.getChildByName('support'+str(close_torch[i][1])).getChildByIndex(0).getChildByIndex(0)
+				fire.setEnabled(True)
+			
+		#print 'lights done'
 
 	#print 'num:',num
 
+	# going to next level
 	if dis_square(pos.x,pos.z,end_x, end_z)<3.5:
-		print 'contratulations!'
+		print 'congratulations!'
 		print 'entering new level!'
 		inGame = False
+		scene.setPhysicsEnabled(False)
 		level+=1
+		#generate_level_only_delete()
 		generate_level()
 
 	# replay bgm
@@ -1458,14 +1626,23 @@ def onUpdate(frame, t, dt):
 		playSound(sd_bgm,cam.getPosition(),0.1)
 
 	# play water dripping sound when entering channels
-	if inGame:
+	if inGame==True:
 		if inChannel==False:
 			if tile[int(pos.z)][int(pos.x)]==16 or tile[int(pos.z)][int(pos.x)]==13 or tile[int(pos.z)][int(pos.x)]==14 or tile[int(pos.z)][int(pos.x)]==15:
 				inChannel = True
-				playSound(sd_water,cam.getPosition(),0.1)
+				playSound(sd_water,cam.getPosition(),0.3)
 		else:
 			if tile[int(pos.z)][int(pos.x)]!=16 and tile[int(pos.z)][int(pos.x)]!=13 and tile[int(pos.z)][int(pos.x)]!=14 and tile[int(pos.z)][int(pos.x)]!=15:
 				inChannel = False
+
+	if isWalking:
+		if startWalking:
+			start_walking_t = t
+			startWalking = False
+		else:
+			if t>start_walking_t+2.1:
+				playSound(sd_footstep,cam.getPosition(), 0.1)
+				start_walking_t = t
 
 setUpdateFunction(onUpdate)
 

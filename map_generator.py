@@ -559,9 +559,10 @@ class Dungeon:
 					possible_places.append((x, y))
 
 
-		chests_to_place = len(self.rooms) / 25
+		chests_to_place = len(self.rooms) / 10
 		if chests_to_place <= 0:
 			chests_to_place = 1
+		print 'chests to place:', chests_to_place
 		for i in range(0, chests_to_place):
 
 			chance = random.randint(0, 7)
@@ -578,6 +579,7 @@ class Dungeon:
 
 			if self.grid[location[1]][location[0]] == 1:
 				self.grid[location[1]][location[0]] = 10
+				print 'placed!'
 
 
 	def generate_dungeon(self):
