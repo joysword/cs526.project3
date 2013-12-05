@@ -142,8 +142,8 @@ setNearFarZ(0.1,30)
 light_flash = Light.create()
 light_flash.setLightType(LightType.Spot)
 light_flash.setColor(Color('#f8c377'))
-light_flash.setLightDirection(Vector3(0,0.03,-1))
-light_flash.setPosition(Vector3(0,0.48,0))
+light_flash.setLightDirection(Vector3(0,0,-1))
+light_flash.setPosition(Vector3(0,0.54,0))
 light_flash.setSpotExponent(64)
 light_flash.setAttenuation(1, 0.02, 0.02)
 light_flash.setSpotCutoff(12)
@@ -266,13 +266,13 @@ shader_floor.vertexShaderName = 'shaders/floor.vert'
 shader_floor.fragmentShaderName = 'shaders/floor.frag'
 #shader_floor.geometryShaderName = 'shaders/floor.geom'
 
-shader_door_left = ProgramAsset()
-shader_door_left.name = 'door_left'
-shader_door_left.vertexShaderName = 'shaders/door_left.vert'
-shader_door_left.fragmentShaderName = 'shaders/door_left.frag'
+# shader_door_left = ProgramAsset()
+# shader_door_left.name = 'door_left'
+# shader_door_left.vertexShaderName = 'shaders/door_left.vert'
+# shader_door_left.fragmentShaderName = 'shaders/door_left.frag'
 
 scene.addProgram(shader_floor)
-scene.addProgram(shader_door_left)
+#scene.addProgram(shader_door_left)
 
 ##############################################################################################################
 # PLAY SOUND
@@ -1058,7 +1058,8 @@ def generate_level():
 
 			elif ti==8: # upstairs
 				sn_upstair.setPosition(x,0,z)
-				me.setPosition(x,BODY_HALF_HEIGHT,z)
+				me.setPosition(x,BODY_HALF_HEIGHT+0.05,z)
+				me.resetOrientation()
 				#cam.setPosition(x,BODY_HALF_HEIGHT,z)
 				me.getRigidBody().sync()
 
@@ -1069,6 +1070,7 @@ def generate_level():
 				ceil.addMaterial(texture.ceil)
 				ceil.getMaterial().setProgram('floor')
 				sn_root.addChild(ceil)
+
 			elif ti==9: # downstairs
 				sn_downstair.setPosition(x,0,z)
 				print "x:",x,"z:",z
@@ -1333,23 +1335,15 @@ generate_level()
 
 def open_door(door):
 	global door_list
-	print 'door current pos:', door.getPosition()
-	door.translate(-1,0,-1,Space.Local)
-	#door.setPosition(Vector3(pos.x-1, pos.y, pos.z-1))
-	print 'door current pos:', door.getPosition()
-	door.yaw(-HALF_PI)
-	door.getRigidBody().sync()
-	#door.yaw(HALF_PI)
-	# interp = InterpolActor(door)
-	# interp.setTransitionType(InterpolActor.LINEAR)
-	# interp.setDuration(2)
-	# interp.setOperation(InterpolActor.POSITION | InterpolActor.ORIENT)
-	# interp.setTargetPosition(Vector3(pos.x-1, pos.y, pos.z-1))
-	# interp.setTargetOrientation(ori)
-	# interp.startInterpolation()
-	#print 'start interpolation'
-	print 'door opened'
+	# print 'door current pos:', door.getPosition()
+	# door.translate(-1,0,-1,Space.Local)
+	# print 'door current pos:', door.getPosition()
+	# door.yaw(-HALF_PI)
+	# door.getRigidBody().sync()
+	# print 'door opened'
 
+	door.setPosition(0,100,0)
+	door.getRigidBody().sync()
 	door_list.remove(door)
 
 
@@ -1373,61 +1367,50 @@ def onEvent():
 		#print 'Wand'
 		axis_lr = e.getAxis(0)
 		axis_ud = e.getAxis(1)
-		# if axis_lr>0.5 or axis_lr<-0.5:
-		# 	print 'axis_lr:',axis_lr
-		# 	if isWalking == False:
-		# 		isWalking = True
-		# 		startWalking = True
-		# 		playSound(sd_footstep,cam.getPosition(), 0.05)
+		if axis_lr>0.2 or axis_lr<-0.2:
+			print 'axis_lr:',axis_lr
+			if isWalking == False:
+				isWalking = True
+				startWalking = True
+				playSound(sd_footstep,cam.getPosition(), 0.05)
 
-		# 	me.translate(0.05,0,0,Space.Local)
+			me.translate(axis_lr*0.05,0,0,Space.Local)
+			me.getRigidBody().sync()
+			seedNumber+=2
+			e.setProcessed()
+		if axis_ud>0.2 or axis_ud<-0.2:
+			print 'axis_ud:',axis_ud
+			if isWalking == False:
+				isWalking = True
+				startWalking = True
+				playSound(sd_footstep,cam.getPosition(), 0.05)
+			me.translate(0,0,axis_ud*0.05,Space.Local)
+			me.getRigidBody().sync()
+			seedNumber+=1
+			e.setProcessed()
+		if axis_lr<0.5 and axis_lr>-0.5 and axis_ud<0.5 and axis_ud>0.5:
+			isWalking = False
+
+		# if e.isButtonDown(EventFlags.ButtonUp):
+		# 	print 'ButtonUp down, moving'
+		# 	me.translate(0,0,-0.2,Space.Local)
 		# 	me.getRigidBody().sync()
-		# 	seedNumber+=2
 		# 	e.setProcessed()
-		# if axis_ud>0.5 or axis_ud<-0.5:
-		# 	print 'axis_ud:',axis_ud
-		# 	if isWalking == False:
-		# 		isWalking = True
-		# 		startWalking = True
-		# 		playSound(sd_footstep,cam.getPosition(), 0.05)
-		# 	me.translate(0,0,0.05,Space.Local)
+		# elif e.isButtonDown(EventFlags.ButtonLeft):
+		# 	print 'ButtonLeft down, moving'
+		# 	me.translate(-0.2,0,0,Space.Local)
 		# 	me.getRigidBody().sync()
-		# 	seedNumber+=1
 		# 	e.setProcessed()
-		# if axis_lr<0.5 and axis_lr>-0.5 and axis_ud<0.5 and axis_ud>0.5:
-		# 	isWalking = False
-
-		if e.isButtonDown(EventFlags.ButtonUp):
-			print 'ButtonUp down, moving'
-			me.translate(0,0,-0.05,Space.Local)
-			me.getRigidBody().sync()
-			e.setProcessed()
-		elif e.isButtonDown(EventFlags.ButtonLeft):
-			print 'ButtonLeft down, moving'
-			me.translate(-0.05,0,0,Space.Local)
-			me.getRigidBody().sync()
-			e.setProcessed()
-		elif e.isButtonDown(EventFlags.ButtonDown):
-			print 'ButtonDown down, moving'
-			me.translate(0,0,0.05,Space.Local)
-			me.getRigidBody().sync()
-			e.setProcessed()
-		elif e.isButtonDown(EventFlags.ButtonRight):
-			print 'ButtonRight down, moving'
-			me.translate(0.05,0,0,Space.Local)
-			me.getRigidBody().sync()
-			e.setProcessed()
-
-		elif e.isButtonDown(EventFlags.Button7):
-			if isButton7down==False:
-				isButton7down = True
-				wandOldPos = e.getPosition()
-				#print 'here'
-
-		elif e.isButtonUp(EventFlags.Button7):
-			isButton7down = False
-			#print 'upup'
-			e.setProcessed()
+		# elif e.isButtonDown(EventFlags.ButtonDown):
+		# 	print 'ButtonDown down, moving'
+		# 	me.translate(0,0,0.2,Space.Local)
+		# 	me.getRigidBody().sync()
+		# 	e.setProcessed()
+		# elif e.isButtonDown(EventFlags.ButtonRight):
+		# 	print 'ButtonRight down, moving'
+		# 	me.translate(0.2,0,0,Space.Local)
+		# 	me.getRigidBody().sync()
+		# 	e.setProcessed()
 
 		# interact
 		elif e.isButtonDown(EventFlags.Button2):
@@ -1444,6 +1427,18 @@ def onEvent():
 		# 	me.getRigidBody().applyCentralImpulse(Vector3(0,240,0))
 		#	e.setProcessed()
 
+		# turn
+		elif e.isButtonDown(EventFlags.Button7):
+			if isButton7down==False:
+				isButton7down = True
+				wandOldPos = e.getPosition()
+				#print 'here'
+
+		elif e.isButtonUp(EventFlags.Button7):
+			isButton7down = False
+			#print 'upup'
+			e.setProcessed()
+
 	 	elif isButton7down:
 			trans = wandOldPos-e.getPosition()
 			me.yaw(trans.x*HALF_PI*0.05)
@@ -1451,6 +1446,7 @@ def onEvent():
 			#print 'here!!!'
 			e.setProcessed()
 
+		# change light
 		elif e.isButtonDown(EventFlags.Button5):
 			print 'Button5 pressed, changing light'
 			light_torch.setEnabled(not light_torch.isEnabled())
@@ -1459,105 +1455,107 @@ def onEvent():
 			e.setProcessed()
 
 		# reset orientation
-		# elif e.isButtonDown(EventFlags.ButtonUp):
-		# 	print 'ButtonUp pressed, reseting orientation'
-		# 	me.resetOrientation()
+		elif e.isButtonDown(EventFlags.ButtonUp):
+			print 'ButtonUp pressed, reseting orientation'
+			me.resetOrientation()
+			me.getRigidBody().sync()
 
 		# CHEAT go to destination
-		# elif e.isButtonDown(EventFlags.ButtonLeft):# or e.isKeyDown(ord('o')):
-		# 	print 'ButtonLeft pressed, going to destination'
-		# 	me.setPosition(end_x-2,BODY_HALF_HEIGHT,end_z-2)
-		# 	#me.resetOrientation()
-		# 	me.getRigidBody().sync()
+		elif e.isButtonDown(EventFlags.ButtonLeft):# or e.isKeyDown(ord('o')):
+			print 'ButtonLeft pressed, going to destination'
+			me.setPosition(end_x-2,BODY_HALF_HEIGHT,end_z-2)
+			#me.resetOrientation()
+			me.getRigidBody().sync()
 
 		# CHEAT go to chests
-		# elif e.isButtonDown(EventFlags.ButtonRight):# or e.isKeyDown(ord('p')):
-		# 	print 'ButtonRight pressed, going to next chest'
-		# 	if at_chest>=len(chest_list):
-		# 		at_chest = 0
-		# 	pos = chest_list[at_chest].getPosition()
-		# 	at_chest+=1
-		# 	me.setPosition(pos.x,BODY_HALF_HEIGHT,pos.z)
-		# 	#me.resetOrientation()
-		# 	me.getRigidBody().sync()
+		elif e.isButtonDown(EventFlags.ButtonRight):# or e.isKeyDown(ord('p')):
+			print 'ButtonRight pressed, going to next chest'
+			if at_chest>=len(chest_list):
+				at_chest = 0
+			pos = chest_list[at_chest].getPosition()
+			at_chest+=1
+			me.setPosition(pos.x,BODY_HALF_HEIGHT,pos.z)
+			me.resetOrientation()
+			me.getRigidBody().sync()
 
-	# if e.getSourceId()==1:
+		# if e.getSourceId()==1:
 
-	# 	axis_left_lr = e.getAxis(0)
-	# 	axis_left_ud = e.getAxis(1)
-	# 	axis_right_lr = e.getAxis(2)
-	# 	axis_right_ud = e.getAxis(3)
+		# 	axis_left_lr = e.getAxis(0)
+		# 	axis_left_ud = e.getAxis(1)
+		# 	axis_right_lr = e.getAxis(2)
+		# 	axis_right_ud = e.getAxis(3)
 
-	# 	ori = None
-	# 	oriVec = None
+		# 	ori = None
+		# 	oriVec = None
 
-	# 	# turn
-	# 	#if e.getServiceType()==ServiceType.Mocap:
-	# 		#print 'mocap', e.getSourceId()
-	# 	ori = e.getOrientation()
-	# 	oriVec = quaternionToEuler(ori)
-	# 	oriVec.y = 0
-	# 	oriVec.normalize()
-	# 	print 'oriVec',oriVec
+		# 	# turn
+		# 	#if e.getServiceType()==ServiceType.Mocap:
+		# 		#print 'mocap', e.getSourceId()
+		# 	ori = e.getOrientation()
+		# 	oriVec = quaternionToEuler(ori)
+		# 	oriVec.y = 0
+		# 	oriVec.normalize()
+		# 	print 'oriVec',oriVec
 
-	# 	# move
-	# 	if axis_left_lr:# and oriVec!=None: # LEFT ANALOG LEFT-RIGHT
-	# 		print 'LR',axis_left_lr
-	# 		print 'LEFT-RIGHT'
-	# 		me.translate(axis_left_lr*0.1*oriVec.x,0,axis_left_lr*0.1*oriVec.z,Space.Local)
-	# 		e.setProcessed()
-	# 	if axis_left_ud:# and oriVec!=None: # LEFT ANALOG UP-DOWN
-	# 		print 'UD',axis_left_ud
-	# 		print 'UP-DOWN'
-	# 		me.translate(axis_left_ud*0.1*oriVec.z,0,axis_left_ud*0.1*oriVec.x,Space.Local)
-	# 		e.setProcessed()
+		# 	# move
+		# 	if axis_left_lr:# and oriVec!=None: # LEFT ANALOG LEFT-RIGHT
+		# 		print 'LR',axis_left_lr
+		# 		print 'LEFT-RIGHT'
+		# 		me.translate(axis_left_lr*0.1*oriVec.x,0,axis_left_lr*0.1*oriVec.z,Space.Local)
+		# 		e.setProcessed()
+		# 	if axis_left_ud:# and oriVec!=None: # LEFT ANALOG UP-DOWN
+		# 		print 'UD',axis_left_ud
+		# 		print 'UP-DOWN'
+		# 		me.translate(axis_left_ud*0.1*oriVec.z,0,axis_left_ud*0.1*oriVec.x,Space.Local)
+		# 		e.setProcessed()
 
-	# 	# turn
-	# 	if axis_right_lr: # RIGHT ANALOG LEFT-RIGHT
-	# 		me.yaw(axis_right_lr*10)
-	# 		e.setProcessed()
+		# 	# turn
+		# 	if axis_right_lr: # RIGHT ANALOG LEFT-RIGHT
+		# 		me.yaw(axis_right_lr*10)
+		# 		e.setProcessed()
 
-	# 	# jump
-	# 	if e.isButtonDown(EventFlags.Button3): # BUTTON A
-	# 		me.getRigidBody().applyCentralImpulse(Vector3(0,120,0))
-	# 		e.setProcessed()
+		# 	# jump
+		# 	if e.isButtonDown(EventFlags.Button3): # BUTTON A
+		# 		me.getRigidBody().applyCentralImpulse(Vector3(0,120,0))
+		# 		e.setProcessed()
 
+	else:
 
-	if e.isKeyDown(ord('a')):
-		me.translate(-0.05,0,0,Space.Local)
-		#print 'a'
-		me.getRigidBody().sync()
-		e.setProcessed()
-	elif e.isKeyDown(ord('s')):
-		me.translate(0,0,0.05,Space.Local)
-		#print 's'
-		me.getRigidBody().sync()
-		e.setProcessed()
-	elif e.isKeyDown(ord('d')):
-		me.translate(0.05,0,0,Space.Local)
-		#print 'd'
-		me.getRigidBody().sync()
-		e.setProcessed()
-	elif e.isKeyDown(ord('w')):
-		me.translate(0,0,-0.05,Space.Local)
-		#print 'w'
-		me.getRigidBody().sync()
-		e.setProcessed()
-	# elif e.isKeyDown(32):
-	# 	#me.translate(0,0.5,0,Space.Local)
-	# 	me.getRigidBody().applyCentralImpulse(Vector3(0,240,0))
-	# 	print 'space_bar'
-	# 	e.setProcessed()
+		if e.isKeyDown(ord('a')):
+			me.translate(-0.05,0,0,Space.Local)
+			#print 'a'
+			me.getRigidBody().sync()
+			e.setProcessed()
+		elif e.isKeyDown(ord('s')):
+			me.translate(0,0,0.05,Space.Local)
+			#print 's'
+			me.getRigidBody().sync()
+			e.setProcessed()
+		elif e.isKeyDown(ord('d')):
+			me.translate(0.05,0,0,Space.Local)
+			#print 'd'
+			me.getRigidBody().sync()
+			e.setProcessed()
+		elif e.isKeyDown(ord('w')):
+			me.translate(0,0,-0.05,Space.Local)
+			#print 'w'
+			me.getRigidBody().sync()
+			e.setProcessed()
 
-	# interact
-	elif e.isKeyDown(ord('e')):
-		for i in xrange(len(door_list)):
-			posDoor = door_list[i].getPosition()
-			if dis_square(posDoor.x,posDoor.z,me.getPosition().x,me.getPosition().z)<4:
-				open_door(door_list[i])
-				break
+		# jump
+		# elif e.isKeyDown(32):
+		# 	#me.translate(0,0.5,0,Space.Local)
+		# 	me.getRigidBody().applyCentralImpulse(Vector3(0,240,0))
+		# 	print 'space_bar'
+		# 	e.setProcessed()
 
-	# 	e.setProcessed()
+		# interact
+		elif e.isKeyDown(ord('e')):
+			for i in xrange(len(door_list)):
+				posDoor = door_list[i].getPosition()
+				if dis_square(posDoor.x,posDoor.z,me.getPosition().x,me.getPosition().z)<4:
+					open_door(door_list[i])
+					break
 
 setEventFunction(onEvent)
 
@@ -1584,11 +1582,13 @@ def onUpdate(frame, t, dt):
 
 	#me.getRigidBody().sync()
 	#print me.getPosition()
+
+	#print 'FPS:',1.0/dt
 	
 	if inGame and scene.isPhysicsEnabled()==False:
 		print 'enabling physics'
 		pp = me.getPosition()
-		me.setPosition(pp.z,BODY_HALF_HEIGHT,pp.z)
+		me.setPosition(pp.x,BODY_HALF_HEIGHT,pp.z)
 		me.getRigidBody().sync()
 	 	scene.setPhysicsEnabled(True)
 
