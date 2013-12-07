@@ -72,7 +72,7 @@ WALL_HEIGHT = 3
 WALL_HALF_HEIGHT = WALL_HEIGHT*0.5
 TILE_WIDTH = 1
 TILE_HALF_WIDTH = TILE_WIDTH*0.5
-BODY_HEIGHT = 1.76
+BODY_HEIGHT = 0.5
 BODY_HALF_HEIGHT = BODY_HEIGHT*0.5
 BODY_WEIGHT = 50
 EYE_HEIGHT = 1.55
@@ -99,7 +99,7 @@ sn_root = SceneNode.create('root')
 ## Create player character - a box
 # TO DO: a cylinder
 
-me = BoxShape.create(0.4,BODY_HEIGHT,0.4)
+me = BoxShape.create(0.5,BODY_HALF_HEIGHT,0.6)
 #me.setEffect('colored -e red')
 #me.setBoundingBoxVisible(True)
 me.getRigidBody().initialize(RigidBodyType.Box, BODY_WEIGHT)
@@ -112,7 +112,7 @@ cam = getDefaultCamera()
 me.addChild(cam)
 #cam.addChild(me)
 
-cam.setPosition(0,-2-BODY_HALF_HEIGHT+EYE_HEIGHT,0)
+cam.setPosition(0,-0.85,0)
 cam.setControllerEnabled(False)
 
 setNearFarZ(0.1,30)
@@ -682,6 +682,8 @@ def generate_level():
 				floor.clearMaterials()
 				floor.addMaterial(texture.channel)
 				floor.getMaterial().setProgram('floor')
+				floor.getRigidBody().initialize(RigidBodyType.Plane,0)
+				floor.getRigidBody().sync()
 				sn_root.addChild(floor)
 
 				top = PlaneShape.create(TILE_WIDTH,TILE_WIDTH)
@@ -699,7 +701,6 @@ def generate_level():
 				door.getMaterial().setProgram('floor')
 				door.getRigidBody().initialize(RigidBodyType.Plane, 0)
 				door.getRigidBody().sync()
-				#door.setEffect('colored -e #00611c')
 				door_list.append(door)
 				sn_root.addChild(door)
 
@@ -712,7 +713,6 @@ def generate_level():
 				west.getMaterial().setProgram('floor')
 				west.getRigidBody().initialize(RigidBodyType.Plane,0)
 				west.getRigidBody().sync()
-				#west.setEffect('colored -d red')
 				sn_root.addChild(west)
 			elif ti==773: # NORTH door right
 
@@ -731,6 +731,8 @@ def generate_level():
 				floor.clearMaterials()
 				floor.addMaterial(texture.channel)
 				floor.getMaterial().setProgram('floor')
+				floor.getRigidBody().initialize(RigidBodyType.Plane,0)
+				floor.getRigidBody().sync()
 				sn_root.addChild(floor)
 
 				top = PlaneShape.create(TILE_WIDTH,TILE_WIDTH)
@@ -758,7 +760,6 @@ def generate_level():
 				east.getMaterial().setProgram('floor')
 				east.getRigidBody().initialize(RigidBodyType.Plane,0)
 				east.getRigidBody().sync()
-				#east.setEffect('colored -e red')
 				sn_root.addChild(east)
 			elif ti==74: # EAST door left
 
@@ -778,6 +779,8 @@ def generate_level():
 				floor.clearMaterials()
 				floor.addMaterial(texture.channel)
 				floor.getMaterial().setProgram('floor')
+				floor.getRigidBody().initialize(RigidBodyType.Plane,0)
+				floor.getRigidBody().sync()
 				sn_root.addChild(floor)
 
 				top = PlaneShape.create(TILE_WIDTH,TILE_WIDTH)
@@ -796,7 +799,6 @@ def generate_level():
 				door.getMaterial().setProgram('floor')
 				door.getRigidBody().initialize(RigidBodyType.Plane, 0)
 				door.getRigidBody().sync()
-				#door.setEffect('colored -e #00611c')
 				door_list.append(door)
 				sn_root.addChild(door)
 
@@ -808,7 +810,6 @@ def generate_level():
 				north.getMaterial().setProgram('floor')
 				north.getRigidBody().initialize(RigidBodyType.Plane,0)
 				north.getRigidBody().sync()
-				#north.setEffect('colored -e red')
 				sn_root.addChild(north)
 			elif ti==774: # EAST door right
 
@@ -828,6 +829,8 @@ def generate_level():
 				floor.clearMaterials()
 				floor.addMaterial(texture.channel)
 				floor.getMaterial().setProgram('floor')
+				floor.getRigidBody().initialize(RigidBodyType.Plane,0)
+				floor.getRigidBody().sync()
 				sn_root.addChild(floor)
 
 				top = PlaneShape.create(TILE_WIDTH,TILE_WIDTH)
@@ -856,7 +859,6 @@ def generate_level():
 				south.getMaterial().setProgram('floor')
 				south.getRigidBody().initialize(RigidBodyType.Plane,0)
 				south.getRigidBody().sync()
-				#south.setEffect('colored -e red')
 				sn_root.addChild(south)
 			elif ti==75: # SOUTH door left
 
@@ -876,6 +878,8 @@ def generate_level():
 				floor.clearMaterials()
 				floor.addMaterial(texture.channel)
 				floor.getMaterial().setProgram('floor')
+				floor.getRigidBody().initialize(RigidBodyType.Plane,0)
+				floor.getRigidBody().sync()
 				sn_root.addChild(floor)
 
 				top = PlaneShape.create(TILE_WIDTH,TILE_WIDTH)
@@ -894,7 +898,6 @@ def generate_level():
 				door.getMaterial().setProgram('floor')
 				door.getRigidBody().initialize(RigidBodyType.Plane, 0)
 				door.getRigidBody().sync()
-				#door.setEffect('colored -e #00611c')
 				door_list.append(door)
 				sn_root.addChild(door)
 
@@ -907,7 +910,6 @@ def generate_level():
 				east.getMaterial().setProgram('floor')
 				east.getRigidBody().initialize(RigidBodyType.Plane,0)
 				east.getRigidBody().sync()
-				#east.setEffect('colored -e red')
 				sn_root.addChild(east)
 			elif ti==775: # SOUTH door right
 
@@ -927,6 +929,8 @@ def generate_level():
 				floor.clearMaterials()
 				floor.addMaterial(texture.channel)
 				floor.getMaterial().setProgram('floor')
+				floor.getRigidBody().initialize(RigidBodyType.Plane,0)
+				floor.getRigidBody().sync()
 				sn_root.addChild(floor)
 
 				top = PlaneShape.create(TILE_WIDTH,TILE_WIDTH)
@@ -955,7 +959,6 @@ def generate_level():
 				west.getMaterial().setProgram('floor')
 				west.getRigidBody().initialize(RigidBodyType.Plane,0)
 				west.getRigidBody().sync()
-				#west.setEffect('colored -e red')
 				sn_root.addChild(west)
 			elif ti==76: # WEST door left
 
@@ -975,6 +978,8 @@ def generate_level():
 				floor.clearMaterials()
 				floor.addMaterial(texture.channel)
 				floor.getMaterial().setProgram('floor')
+				floor.getRigidBody().initialize(RigidBodyType.Plane,0)
+				floor.getRigidBody().sync()
 				sn_root.addChild(floor)
 
 				top = PlaneShape.create(TILE_WIDTH,TILE_WIDTH)
@@ -993,7 +998,6 @@ def generate_level():
 				door.getMaterial().setProgram('floor')
 				door.getRigidBody().initialize(RigidBodyType.Plane, 0)
 				door.getRigidBody().sync()
-				#door.setEffect('colored -e #00611c')
 				door_list.append(door)
 				sn_root.addChild(door)
 
@@ -1006,7 +1010,6 @@ def generate_level():
 				south.getMaterial().setProgram('floor')
 				south.getRigidBody().initialize(RigidBodyType.Plane,0)
 				south.getRigidBody().sync()
-				#south.setEffect('colored -e red')
 				sn_root.addChild(south)
 			elif ti==776: # WEST door right
 
@@ -1026,6 +1029,8 @@ def generate_level():
 				floor.clearMaterials()
 				floor.addMaterial(texture.channel)
 				floor.getMaterial().setProgram('floor')
+				floor.getRigidBody().initialize(RigidBodyType.Plane,0)
+				floor.getRigidBody().sync()
 				sn_root.addChild(floor)
 
 				top = PlaneShape.create(TILE_WIDTH,TILE_WIDTH)
@@ -1051,7 +1056,6 @@ def generate_level():
 				north.clearMaterials()
 				north.addMaterial(texture.side)
 				north.getMaterial().setProgram('floor')
-				#north.setEffect('colored -e red')
 				north.getRigidBody().initialize(RigidBodyType.Plane,0)
 				north.getRigidBody().sync()
 				sn_root.addChild(north)
@@ -1092,6 +1096,8 @@ def generate_level():
 				floor.clearMaterials()
 				floor.addMaterial(texture.floor)
 				floor.getMaterial().setProgram('floor')
+				floor.getRigidBody().initialize(RigidBodyType.Plane,0)
+				floor.getRigidBody().sync()
 				sn_root.addChild(floor)
 
 				chest = Chest(len(chest_list))
@@ -1342,9 +1348,12 @@ def open_door(door):
 	# door.getRigidBody().sync()
 	# print 'door opened'
 
-	door.setPosition(0,100,0)
-	door.getRigidBody().sync()
+	#door.setPosition(0,100,0)
+	#door.getRigidBody().sync()
 	door_list.remove(door)
+
+	door.getParent().removeChildByRef(door)
+	print 'door removed'
 
 
 def onEvent():
@@ -1364,6 +1373,27 @@ def onEvent():
 	e = getEvent()
 
 	if e.getServiceType()==ServiceType.Wand:
+
+		# CHEAT go to chests
+		if e.isButtonDown(EventFlags.ButtonRight):# or e.isKeyDown(ord('p')):
+			print 'ButtonRight pressed, going to next chest'
+			e.setProcessed()
+			if at_chest>=len(chest_list):
+				at_chest = 0
+			pos = chest_list[at_chest].getPosition()
+			at_chest+=1
+			me.setPosition(pos.x,BODY_HALF_HEIGHT,pos.z)
+			me.resetOrientation()
+			me.getRigidBody().sync()
+
+		# CHEAT go to destination
+		if e.isButtonDown(EventFlags.ButtonLeft):# or e.isKeyDown(ord('o')):
+			print 'ButtonLeft pressed, going to destination'
+			e.setProcessed()
+			me.setPosition(end_x-2,BODY_HALF_HEIGHT,end_z-2)
+			#me.resetOrientation()
+			me.getRigidBody().sync()
+
 		#print 'Wand'
 		axis_lr = e.getAxis(0)
 		axis_ud = e.getAxis(1)
@@ -1374,7 +1404,7 @@ def onEvent():
 				startWalking = True
 				playSound(sd_footstep,cam.getPosition(), 0.05)
 
-			me.translate(axis_lr*0.05,0,0,Space.Local)
+			me.translate(axis_lr*0.02,0,0,Space.Local)
 			me.getRigidBody().sync()
 			seedNumber+=2
 			e.setProcessed()
@@ -1384,37 +1414,18 @@ def onEvent():
 				isWalking = True
 				startWalking = True
 				playSound(sd_footstep,cam.getPosition(), 0.05)
-			me.translate(0,0,axis_ud*0.05,Space.Local)
+			me.translate(0,0,axis_ud*0.02,Space.Local)
 			me.getRigidBody().sync()
 			seedNumber+=1
 			e.setProcessed()
-		if axis_lr<0.5 and axis_lr>-0.5 and axis_ud<0.5 and axis_ud>0.5:
+		
+		if axis_lr<0.2 and axis_lr>-0.2 and axis_ud<0.2 and axis_ud>0.2:
 			isWalking = False
 
-		# if e.isButtonDown(EventFlags.ButtonUp):
-		# 	print 'ButtonUp down, moving'
-		# 	me.translate(0,0,-0.2,Space.Local)
-		# 	me.getRigidBody().sync()
-		# 	e.setProcessed()
-		# elif e.isButtonDown(EventFlags.ButtonLeft):
-		# 	print 'ButtonLeft down, moving'
-		# 	me.translate(-0.2,0,0,Space.Local)
-		# 	me.getRigidBody().sync()
-		# 	e.setProcessed()
-		# elif e.isButtonDown(EventFlags.ButtonDown):
-		# 	print 'ButtonDown down, moving'
-		# 	me.translate(0,0,0.2,Space.Local)
-		# 	me.getRigidBody().sync()
-		# 	e.setProcessed()
-		# elif e.isButtonDown(EventFlags.ButtonRight):
-		# 	print 'ButtonRight down, moving'
-		# 	me.translate(0.2,0,0,Space.Local)
-		# 	me.getRigidBody().sync()
-		# 	e.setProcessed()
-
 		# interact
-		elif e.isButtonDown(EventFlags.Button2):
+		if e.isButtonDown(EventFlags.Button2):
 			print 'Button2 pressed, interacting'
+			e.setProcessed()
 			for i in xrange(len(door_list)):
 				posDoor = door_list[i].getPosition()
 				if dis_square(posDoor.x,posDoor.z,me.getPosition().x,me.getPosition().z)<7:
@@ -1426,6 +1437,23 @@ def onEvent():
 		# 	seedNumber-=3
 		# 	me.getRigidBody().applyCentralImpulse(Vector3(0,240,0))
 		#	e.setProcessed()
+
+		# change light
+		if e.isButtonDown(EventFlags.Button5):
+			print 'Button5 pressed, changing light'
+			light_torch.setEnabled(not light_torch.isEnabled())
+			light_flash.setEnabled(not light_flash.isEnabled())
+			scene.reloadAndRecompileShaders()
+			e.setProcessed()
+
+		# reset orientation
+		if e.isButtonDown(EventFlags.ButtonUp):
+			print 'ButtonUp pressed, reseting orientation'
+			e.setProcessed()
+			me.resetOrientation()
+			me.getRigidBody().sync()
+			me.getRigidBody().setLinearVelocity(Vector3(0,0,0))
+			me.getRigidBody().setAngularVelocity(Vector3(0,0,0))
 
 		# turn
 		elif e.isButtonDown(EventFlags.Button7):
@@ -1441,42 +1469,10 @@ def onEvent():
 
 	 	elif isButton7down:
 			trans = wandOldPos-e.getPosition()
-			me.yaw(trans.x*HALF_PI*0.05)
+			me.yaw(trans.x*HALF_PI*0.01)
 			me.getRigidBody().sync()
 			#print 'here!!!'
 			e.setProcessed()
-
-		# change light
-		elif e.isButtonDown(EventFlags.Button5):
-			print 'Button5 pressed, changing light'
-			light_torch.setEnabled(not light_torch.isEnabled())
-			light_flash.setEnabled(not light_flash.isEnabled())
-			scene.reloadAndRecompileShaders()
-			e.setProcessed()
-
-		# reset orientation
-		elif e.isButtonDown(EventFlags.ButtonUp):
-			print 'ButtonUp pressed, reseting orientation'
-			me.resetOrientation()
-			me.getRigidBody().sync()
-
-		# CHEAT go to destination
-		elif e.isButtonDown(EventFlags.ButtonLeft):# or e.isKeyDown(ord('o')):
-			print 'ButtonLeft pressed, going to destination'
-			me.setPosition(end_x-2,BODY_HALF_HEIGHT,end_z-2)
-			#me.resetOrientation()
-			me.getRigidBody().sync()
-
-		# CHEAT go to chests
-		elif e.isButtonDown(EventFlags.ButtonRight):# or e.isKeyDown(ord('p')):
-			print 'ButtonRight pressed, going to next chest'
-			if at_chest>=len(chest_list):
-				at_chest = 0
-			pos = chest_list[at_chest].getPosition()
-			at_chest+=1
-			me.setPosition(pos.x,BODY_HALF_HEIGHT,pos.z)
-			me.resetOrientation()
-			me.getRigidBody().sync()
 
 		# if e.getSourceId()==1:
 
@@ -1645,12 +1641,6 @@ def onUpdate(frame, t, dt):
 		#generate_level_only_delete()
 		generate_level()
 
-	# replay bgm
-	if t-bgmDeltaT>=50:
-		print "replaying bgm"
-		bgmDeltaT = t
-		playSound(sd_bgm,cam.getPosition(),0.1)
-
 	# play water dripping sound when entering channels
 	if inGame==True:
 		if inChannel==False:
@@ -1663,14 +1653,20 @@ def onUpdate(frame, t, dt):
 				inChannel = False
 				print 'inChannel', inChannel
 
-	if isWalking:
-		if startWalking:
-			start_walking_t = t
-			startWalking = False
-		else:
-			if t>start_walking_t+2.1:
-				playSound(sd_footstep,cam.getPosition(), 0.05)
-				start_walking_t = t
+	# replay bgm
+	if t-bgmDeltaT>=50:
+		print "replaying bgm"
+		bgmDeltaT = t
+		playSound(sd_bgm,cam.getPosition(),0.1)
+
+	# if isWalking:
+	# 	if startWalking:
+	# 		start_walking_t = t
+	# 		startWalking = False
+	# 	else:
+	# 		if t>start_walking_t+2.1:
+	# 			playSound(sd_footstep,cam.getPosition(), 0.05)
+	# 			start_walking_t = t
 
 setUpdateFunction(onUpdate)
 
